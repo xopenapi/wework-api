@@ -262,19 +262,18 @@ paths:
         '200':
           description: successful operation
           schema:
-            allOf:
-              - $ref: '#/definitions/BaseResponse'
-              - type: object
-                properties:
-                  openid:
-                    type: string
+            $ref: '#/definitions/ConvertToOpenidRsp'
 definitions:
   ConvertToOpenidReq:
+    properties:
+      userid:
+        type: string
+  ConvertToOpenidRsp:
     allOf:
       - $ref: '#/definitions/BaseResponse'
       - type: object
         properties:
-          userid:
+          openid:
             type: string
   ListUserRsp:
     description: ListUserRsp

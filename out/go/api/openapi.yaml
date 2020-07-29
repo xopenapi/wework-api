@@ -255,7 +255,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200'
+                $ref: '#/components/schemas/ConvertToOpenidRsp'
           description: successful operation
       summary: userid与openid互换
       tags:
@@ -264,9 +264,16 @@ paths:
 components:
   schemas:
     ConvertToOpenidReq:
+      example:
+        userid: userid
+      properties:
+        userid:
+          type: string
+      type: object
+    ConvertToOpenidRsp:
       allOf:
       - $ref: '#/components/schemas/BaseResponse'
-      - $ref: '#/components/schemas/ConvertToOpenidReq_allOf'
+      - $ref: '#/components/schemas/ConvertToOpenidRsp_allOf'
     ListUserRsp:
       allOf:
       - $ref: '#/components/schemas/BaseResponse'
@@ -595,20 +602,9 @@ components:
         errmsg:
           type: string
       type: object
-    inline_response_200:
-      example:
-        BaseResponse:
-          errcode: errcode
-          errmsg: errmsg
-        openid: openid
+    ConvertToOpenidRsp_allOf:
       properties:
-        BaseResponse:
-          $ref: '#/components/schemas/BaseResponse'
         openid:
-          type: string
-    ConvertToOpenidReq_allOf:
-      properties:
-        userid:
           type: string
     ListUserRsp_allOf:
       properties:

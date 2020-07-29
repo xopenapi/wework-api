@@ -51,7 +51,7 @@ No authorization required
 
 ## ConvertToOpenid
 
-> InlineResponse200 ConvertToOpenid(ctx, body)
+> ConvertToOpenidRsp ConvertToOpenid(ctx, body)
 
 userid与openid互换
 
@@ -67,7 +67,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**InlineResponse200**](inline_response_200.md)
+[**ConvertToOpenidRsp**](ConvertToOpenidRsp.md)
 
 ### Authorization
 

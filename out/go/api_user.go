@@ -108,16 +108,16 @@ ConvertToOpenid userid与openid互换
 userid转openid
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param body
-@return InlineResponse200
+@return ConvertToOpenidRsp
 */
-func (a *UserApiService) ConvertToOpenid(ctx _context.Context, body ConvertToOpenidReq) (InlineResponse200, *_nethttp.Response, error) {
+func (a *UserApiService) ConvertToOpenid(ctx _context.Context, body ConvertToOpenidReq) (ConvertToOpenidRsp, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
 		localVarFormFileName string
 		localVarFileName     string
 		localVarFileBytes    []byte
-		localVarReturnValue  InlineResponse200
+		localVarReturnValue  ConvertToOpenidRsp
 	)
 
 	// create path and map variables

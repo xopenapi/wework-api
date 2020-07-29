@@ -8,7 +8,7 @@
  */
 
 package openapi
-// ConvertToOpenidReq struct for ConvertToOpenidReq
-type ConvertToOpenidReq struct {
-	Userid string `json:"userid,omitempty"`
+// ConvertToOpenidRspAllOf struct for ConvertToOpenidRspAllOf
+type ConvertToOpenidRspAllOf struct {
+	Openid string `json:"openid,omitempty"`
 }
