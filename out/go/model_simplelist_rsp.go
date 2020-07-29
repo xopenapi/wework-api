@@ -12,4 +12,5 @@ package openapi
 type SimplelistRsp struct {
 	Errcode string `json:"errcode,omitempty"`
 	Errmsg string `json:"errmsg,omitempty"`
+	Userlist []map[string]interface{} `json:"userlist,omitempty"`
 }

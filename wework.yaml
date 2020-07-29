@@ -237,26 +237,26 @@ definitions:
             items:
               schema: '#/definitions/User'
   SimplelistRsp:
+    description: SimplelistRsp
     allOf:
       - $ref: '#/definitions/BaseResponse'
-    title: SimplelistRsp
-    description: SimplelistRsp
-    properties:
-      userlist:
-        type: array
-        items:
-          schema:
-            userid:
-              type: string
-            name:
-              type: string
-            department:
-              type: array
-              items:
-                type: integer
-                format: int32
-            open_userid:
-              type: string
+      - type: object
+        properties:
+          userlist:
+            type: array
+            items:
+              schema:
+                userid:
+                  type: string
+                name:
+                  type: string
+                department:
+                  type: array
+                  items:
+                    type: integer
+                    format: int32
+                open_userid:
+                  type: string
   BatchDeleteUserReq:
     title: BatchDeleteUserReq
     description: BatchDeleteUserReq

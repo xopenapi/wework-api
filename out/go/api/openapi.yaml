@@ -234,17 +234,8 @@ components:
     SimplelistRsp:
       allOf:
       - $ref: '#/components/schemas/BaseResponse'
+      - $ref: '#/components/schemas/ListUserRsp_allOf'
       description: SimplelistRsp
-      example:
-        userlist:
-        - '{}'
-        - '{}'
-      properties:
-        userlist:
-          items:
-            type: object
-          type: array
-      title: SimplelistRsp
     BatchDeleteUserReq:
       description: BatchDeleteUserReq
       example:
