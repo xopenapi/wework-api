@@ -1,0 +1,574 @@
+openapi: 3.0.1
+info:
+  description: 企业微信服务端API.
+  license:
+    name: Apache-2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  title: 企业微信服务端API
+  version: 1.0.0
+servers:
+- url: https://qyapi.weixin.qq.com/cgi-bin
+tags:
+- name: token
+paths:
+  /gettoken:
+    get:
+      operationId: gettoken
+      parameters:
+      - description: 企业ID
+        in: query
+        name: corpid
+        required: true
+        schema:
+          type: string
+      - description: 应用的凭证密钥
+        in: query
+        name: corpsecret
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenRsp'
+          description: successful operation
+      summary: 每个应用有独立的secret，获取到的access_token只能本应用使用，所以每个应用的access_token应该分开来获取
+      tags:
+      - token
+  /get_api_domain_ip:
+    get:
+      operationId: get_api_domain_ip
+      parameters:
+      - in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetApiDomainIpRsp'
+          description: successful operation
+      summary: 获取企业微信API域名IP段
+  /user/create:
+    post:
+      description: 创建成员
+      operationId: create
+      parameters:
+      - in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserReq'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+          description: successful operation
+      summary: 创建成员
+      x-codegen-request-body-name: body
+  /user/get:
+    get:
+      description: 读取成员
+      operationId: get
+      parameters:
+      - in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: userid
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserRsp'
+          description: successful operation
+      summary: 读取成员
+  /user/update:
+    post:
+      description: 更新成员
+      operationId: update
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUserReq'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+          description: successful operation
+      summary: 更新成员
+      x-codegen-request-body-name: body
+  /user/delete:
+    get:
+      description: 删除成员
+      operationId: delete
+      parameters:
+      - in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: userid
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+          description: successful operation
+      summary: 删除成员
+  /user/batchdelete:
+    post:
+      description: 批量删除成员
+      operationId: batchdelete
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BatchDeleteUserReq'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+          description: successful operation
+      summary: 批量删除成员
+      x-codegen-request-body-name: body
+  /user/simplelist:
+    get:
+      description: 获取部门成员
+      operationId: simplelist
+      parameters:
+      - in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: department_id
+        required: true
+        schema:
+          format: int32
+          type: integer
+      - in: query
+        name: fetch_child
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimplelistRsp'
+          description: successful operation
+      summary: 获取部门成员
+  /user/list:
+    get:
+      description: 获取部门成员详情
+      operationId: list
+      parameters:
+      - description: 调用接口凭证
+        in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      - description: 获取的部门id
+        in: query
+        name: department_id
+        required: true
+        schema:
+          format: int32
+          type: integer
+      - description: 1/0：是否递归获取子部门下面的成员
+        in: query
+        name: fetch_child
+        schema:
+          format: int32
+          type: integer
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListUserRsp'
+          description: successful operation
+      summary: 获取部门成员详情
+components:
+  schemas:
+    ListUserRsp:
+      allOf:
+      - $ref: '#/components/schemas/BaseResponse'
+      description: ListUserRsp
+      example:
+        userlist:
+        - '{}'
+        - '{}'
+      properties:
+        userlist:
+          items:
+            type: object
+          type: array
+      title: ListUserRsp
+    SimplelistRsp:
+      allOf:
+      - $ref: '#/components/schemas/BaseResponse'
+      description: SimplelistRsp
+      example:
+        userlist:
+        - '{}'
+        - '{}'
+      properties:
+        userlist:
+          items:
+            type: object
+          type: array
+      title: SimplelistRsp
+    BatchDeleteUserReq:
+      description: BatchDeleteUserReq
+      example:
+        useridlist:
+        - useridlist
+        - useridlist
+      properties:
+        useridlist:
+          items:
+            type: string
+          type: array
+      title: BatchDeleteUserReq
+      type: object
+    UpdateUserReq:
+      description: UpdateUserReq
+      example:
+        address: address
+        gender: 1
+        external_position: external_position
+        mobile: mobile
+        is_leader_in_dept:
+        - 5
+        - 5
+        telephone: telephone
+        main_department: 2
+        userid: userid
+        enable: 5
+        avatar_mediaid: avatar_mediaid
+        name: name
+        alias: alias
+        extattr: '{}'
+        position: position
+        department:
+        - 0
+        - 0
+        external_profile: '{}'
+        email: email
+        order:
+        - 6
+        - 6
+      properties:
+        userid:
+          type: string
+        name:
+          type: string
+        department:
+          items:
+            format: int32
+            type: integer
+          type: array
+        order:
+          items:
+            format: int32
+            type: integer
+          type: array
+        position:
+          type: string
+        mobile:
+          type: string
+        gender:
+          format: int32
+          type: integer
+        email:
+          type: string
+        is_leader_in_dept:
+          items:
+            format: int32
+            type: integer
+          type: array
+        enable:
+          format: int32
+          type: integer
+        avatar_mediaid:
+          type: string
+        telephone:
+          type: string
+        alias:
+          type: string
+        address:
+          type: string
+        main_department:
+          format: int32
+          type: integer
+        extattr:
+          properties: {}
+          type: object
+        external_position:
+          type: string
+        external_profile:
+          properties: {}
+          type: object
+      title: UpdateUserReq
+      type: object
+    GetUserRsp:
+      allOf:
+      - $ref: '#/components/schemas/User'
+      - $ref: '#/components/schemas/BaseResponse'
+    User:
+      description: User
+      properties:
+        userid:
+          description: 成员UserID。对应管理端的帐号，企业内必须唯一。不区分大小写，长度为1~64个字节。只能由数字、字母和“_-@.”四种字符组成，且第一个字符必须是数字或字母。
+          type: string
+        name:
+          description: 成员名称。长度为1~64个utf8字符
+          type: string
+        department:
+          description: 成员所属部门id列表,不超过20个
+          items:
+            format: int32
+            type: integer
+          type: array
+        order:
+          description: 部门内的排序值
+          items:
+            format: int32
+            type: integer
+          type: array
+        position:
+          description: 职务信息
+          type: string
+        mobile:
+          description: 手机号码。企业内必须唯一，mobile/email二者不能同时为空
+          type: string
+        gender:
+          description: 性别
+          format: int32
+          type: integer
+        email:
+          description: 邮箱
+          type: string
+        is_leader_in_dept:
+          description: 个数必须和参数department的个数一致
+          format: int32
+          type: integer
+        avatar:
+          description: 成员头像的mediaid
+          type: string
+        thumb_avatar:
+          description: 头像缩略图url
+          type: string
+        telephone:
+          description: 座机
+          type: string
+        alias:
+          description: 成员别名。长度1~32个utf8字符
+          type: string
+        address:
+          description: 地址
+          type: string
+        open_userid:
+          description: 全局唯一。对于同一个服务商，不同应用获取到企业内同一个成员的open_userid是相同的，最多64个字节。仅第三方应用可获取
+          type: string
+        main_department:
+          description: 主部门
+          type: string
+        status:
+          description: 激活状态 1=已激活，2=已禁用，4=未激活，5=退出企业。
+          format: int32
+          type: integer
+        qr_code:
+          description: 员工个人二维码，扫描可添加为外部联系人(注意返回的是一个url，可在浏览器上打开该url以展示二维码)；第三方仅通讯录应用可获取。
+          type: string
+        external_position:
+          description: 对外职务
+          type: string
+        external_profile:
+          description: 成员对外属性
+          properties: {}
+          type: object
+        extattr:
+          description: 自定义字段
+          properties: {}
+          type: object
+      title: User
+      type: object
+    ExternalProfile:
+      description: ExternalProfile
+      properties:
+        external_corp_name:
+          type: string
+        external_attr:
+          items:
+            $ref: '#/components/schemas/ExtAttr'
+          type: array
+      title: ExternalProfile
+      type: object
+    CreateUserReq:
+      description: CreateUserReq
+      example:
+        gender: 1
+        mobile: mobile
+        is_leader_in_dept: 5
+        telephone: telephone
+        userid: userid
+        avatar_mediaid: avatar_mediaid
+        enable: 5
+        name: name
+        alias: alias
+        extattr: '{}'
+        position: position
+        department:
+        - 0
+        - 0
+        email: email
+        order:
+        - 6
+        - 6
+      properties:
+        userid:
+          description: 成员UserID。对应管理端的帐号，企业内必须唯一。不区分大小写，长度为1~64个字节。只能由数字、字母和“_-@.”四种字符组成，且第一个字符必须是数字或字母。
+          type: string
+        name:
+          description: 成员名称。长度为1~64个utf8字符
+          type: string
+        alias:
+          description: 成员别名。长度1~32个utf8字符
+          type: string
+        mobile:
+          description: 手机号码。企业内必须唯一，mobile/email二者不能同时为空
+          type: string
+        department:
+          description: 成员所属部门id列表,不超过20个
+          items:
+            format: int32
+            type: integer
+          type: array
+        order:
+          description: 部门内的排序值
+          items:
+            format: int32
+            type: integer
+          type: array
+        position:
+          description: 职务信息
+          type: string
+        gender:
+          description: 性别
+          format: int32
+          type: integer
+        email:
+          description: 邮箱
+          type: string
+        telephone:
+          description: 座机
+          type: string
+        is_leader_in_dept:
+          description: 个数必须和参数department的个数一致
+          format: int32
+          type: integer
+        avatar_mediaid:
+          description: 成员头像的mediaid
+          type: string
+        enable:
+          description: 启用/禁用成员。1表示启用成员，0表示禁用成员
+          format: int32
+          type: integer
+        extattr:
+          description: 自定义字段
+          properties: {}
+          type: object
+      title: CreateUserReq
+      type: object
+    ExtAttrs:
+      properties:
+        attrs:
+          items:
+            $ref: '#/components/schemas/ExtAttr'
+          type: array
+      title: ExtAttrs
+      type: object
+    ExtAttr:
+      properties:
+        type:
+          format: int32
+          type: integer
+        name:
+          type: string
+      title: ExtAttr
+      type: object
+    TokenRsp:
+      allOf:
+      - $ref: '#/components/schemas/BaseResponse'
+      description: TokenRsp
+      example:
+        access_token: access_token
+        expires_in: 0
+      properties:
+        access_token:
+          type: string
+        expires_in:
+          format: int64
+          type: integer
+      title: TokenRsp
+    GetApiDomainIpRsp:
+      allOf:
+      - $ref: '#/components/schemas/BaseResponse'
+      description: GetApiDomainIpRsp
+      example:
+        ip_list:
+        - ip_list
+        - ip_list
+      properties:
+        ip_list:
+          items:
+            type: string
+          type: array
+      title: GetApiDomainIpRsp
+    BaseResponse:
+      example:
+        errcode: errcode
+        errmsg: errmsg
+      properties:
+        errcode:
+          type: string
+        errmsg:
+          type: string
+      type: object
