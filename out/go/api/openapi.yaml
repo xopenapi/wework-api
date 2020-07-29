@@ -229,17 +229,8 @@ components:
     ListUserRsp:
       allOf:
       - $ref: '#/components/schemas/BaseResponse'
+      - $ref: '#/components/schemas/ListUserRsp_allOf'
       description: ListUserRsp
-      example:
-        userlist:
-        - '{}'
-        - '{}'
-      properties:
-        userlist:
-          items:
-            type: object
-          type: array
-      title: ListUserRsp
     SimplelistRsp:
       allOf:
       - $ref: '#/components/schemas/BaseResponse'
@@ -572,3 +563,9 @@ components:
         errmsg:
           type: string
       type: object
+    ListUserRsp_allOf:
+      properties:
+        userlist:
+          items:
+            type: object
+          type: array

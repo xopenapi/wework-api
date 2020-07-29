@@ -54,6 +54,7 @@ Class | Method | HTTP request | Description
  - [GetApiDomainIpRsp](docs/GetApiDomainIpRsp.md)
  - [GetUserRsp](docs/GetUserRsp.md)
  - [ListUserRsp](docs/ListUserRsp.md)
+ - [ListUserRspAllOf](docs/ListUserRspAllOf.md)
  - [SimplelistRsp](docs/SimplelistRsp.md)
  - [TokenRsp](docs/TokenRsp.md)
  - [UpdateUserReq](docs/UpdateUserReq.md)

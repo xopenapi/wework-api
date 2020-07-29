@@ -16,6 +16,7 @@ docs/ExternalProfile.md
 docs/GetApiDomainIpRsp.md
 docs/GetUserRsp.md
 docs/ListUserRsp.md
+docs/ListUserRspAllOf.md
 docs/SimplelistRsp.md
 docs/TokenApi.md
 docs/TokenRsp.md
@@ -33,6 +34,7 @@ model_external_profile.go
 model_get_api_domain_ip_rsp.go
 model_get_user_rsp.go
 model_list_user_rsp.go
+model_list_user_rsp_all_of.go
 model_simplelist_rsp.go
 model_token_rsp.go
 model_update_user_req.go

@@ -8,9 +8,7 @@
  */
 
 package openapi
-// ListUserRsp ListUserRsp
-type ListUserRsp struct {
-	Errcode string `json:"errcode,omitempty"`
-	Errmsg string `json:"errmsg,omitempty"`
+// ListUserRspAllOf struct for ListUserRspAllOf
+type ListUserRspAllOf struct {
 	Userlist []map[string]interface{} `json:"userlist,omitempty"`
 }

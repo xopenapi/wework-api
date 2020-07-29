@@ -227,15 +227,15 @@ paths:
             $ref: '#/definitions/ListUserRsp'
 definitions:
   ListUserRsp:
+    description: ListUserRsp
     allOf:
       - $ref: '#/definitions/BaseResponse'
-    title: ListUserRsp
-    description: ListUserRsp
-    properties:
-      userlist:
-        type: array
-        items:
-          schema: '#/definitions/User'
+      - type: object
+        properties:
+          userlist:
+            type: array
+            items:
+              schema: '#/definitions/User'
   SimplelistRsp:
     allOf:
       - $ref: '#/definitions/BaseResponse'
