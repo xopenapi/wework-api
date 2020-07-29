@@ -2,6 +2,7 @@
 .travis.yml
 README.md
 api/openapi.yaml
+api_default.go
 api_token.go
 api_user.go
 client.go
@@ -12,10 +13,13 @@ docs/ConvertToOpenidReq.md
 docs/ConvertToOpenidRsp.md
 docs/ConvertToOpenidRspAllOf.md
 docs/CreateUserReq.md
+docs/DefaultApi.md
 docs/ExtAttr.md
 docs/ExtAttrs.md
 docs/ExternalProfile.md
 docs/GetApiDomainIpRsp.md
+docs/GetJoinQrcodeRsp.md
+docs/GetJoinQrcodeRspAllOf.md
 docs/GetUserRsp.md
 docs/InviteReq.md
 docs/InviteRsp.md
@@ -41,6 +45,8 @@ model_ext_attr.go
 model_ext_attrs.go
 model_external_profile.go
 model_get_api_domain_ip_rsp.go
+model_get_join_qrcode_rsp.go
+model_get_join_qrcode_rsp_all_of.go
 model_get_user_rsp.go
 model_invite_req.go
 model_invite_rsp.go

@@ -317,8 +317,34 @@ paths:
       tags:
       - user
       x-codegen-request-body-name: body
+  /corp/get_join_qrcode:
+    get:
+      operationId: get_join_qrcode
+      parameters:
+      - in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: size_type
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetJoinQrcodeRsp'
+          description: successful operation
+      summary: 获取加入企业二维码
 components:
   schemas:
+    GetJoinQrcodeRsp:
+      allOf:
+      - $ref: '#/components/schemas/BaseResponse'
+      - $ref: '#/components/schemas/GetJoinQrcodeRsp_allOf'
+      title: GetJoinQrcodeRsp
     InviteReq:
       description: InviteReq
       example:
@@ -689,6 +715,10 @@ components:
         errmsg:
           type: string
       type: object
+    GetJoinQrcodeRsp_allOf:
+      properties:
+        join_qrcode:
+          type: string
     InviteRsp_allOf:
       properties:
         invaliduser:

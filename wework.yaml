@@ -1,16 +1,16 @@
-swagger: '2.0'
+swagger: "2.0"
 info:
-  description: '企业微信服务端API.'
+  description: "企业微信服务端API."
   version: 1.0.0
   title: 企业微信服务端API
   license:
     name: Apache-2.0
-    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+    url: "https://www.apache.org/licenses/LICENSE-2.0.html"
 host: qyapi.weixin.qq.com
 basePath: /cgi-bin
 tags:
   - name: token
-    description: 
+    description:
 schemes:
   - https
 paths:
@@ -19,7 +19,7 @@ paths:
       tags:
         - token
       summary: 每个应用有独立的secret，获取到的access_token只能本应用使用，所以每个应用的access_token应该分开来获取
-      description: ''
+      description: ""
       operationId: gettoken
       produces:
         - application/json
@@ -35,16 +35,16 @@ paths:
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: successful operation
           schema:
-            $ref: '#/definitions/TokenRsp'
+            $ref: "#/definitions/TokenRsp"
   /get_api_domain_ip:
     get:
       tags:
         - token
       summary: 获取企业微信API域名IP段
-      description: ''
+      description: ""
       operationId: get_api_domain_ip
       produces:
         - application/json
@@ -54,10 +54,10 @@ paths:
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: successful operation
           schema:
-            $ref: '#/definitions/GetApiDomainIpRsp'
+            $ref: "#/definitions/GetApiDomainIpRsp"
   /user/create:
     post:
       tags:
@@ -78,12 +78,12 @@ paths:
           name: body
           required: true
           schema:
-            $ref: '#/definitions/CreateUserReq'
+            $ref: "#/definitions/CreateUserReq"
       responses:
-        '200':
+        "200":
           description: successful operation
           schema:
-            $ref: '#/definitions/BaseResponse'
+            $ref: "#/definitions/BaseResponse"
   /user/get:
     get:
       tags:
@@ -103,10 +103,10 @@ paths:
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: successful operation
           schema:
-            $ref: '#/definitions/GetUserRsp'
+            $ref: "#/definitions/GetUserRsp"
   /user/update:
     post:
       tags:
@@ -123,12 +123,12 @@ paths:
           name: body
           required: true
           schema:
-            $ref: '#/definitions/UpdateUserReq'
+            $ref: "#/definitions/UpdateUserReq"
       responses:
-        '200':
+        "200":
           description: successful operation
           schema:
-            $ref: '#/definitions/BaseResponse'
+            $ref: "#/definitions/BaseResponse"
   /user/delete:
     get:
       tags:
@@ -150,10 +150,10 @@ paths:
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: successful operation
           schema:
-            $ref: '#/definitions/BaseResponse'
+            $ref: "#/definitions/BaseResponse"
   /user/batchdelete:
     post:
       tags:
@@ -170,12 +170,12 @@ paths:
           name: body
           required: true
           schema:
-            $ref: '#/definitions/BatchDeleteUserReq'
+            $ref: "#/definitions/BatchDeleteUserReq"
       responses:
-        '200':
+        "200":
           description: successful operation
           schema:
-            $ref: '#/definitions/BaseResponse'
+            $ref: "#/definitions/BaseResponse"
   /user/simplelist:
     get:
       tags:
@@ -203,10 +203,10 @@ paths:
           type: integer
           format: int32
       responses:
-        '200':
+        "200":
           description: successful operation
           schema:
-            $ref: '#/definitions/SimplelistRsp'
+            $ref: "#/definitions/SimplelistRsp"
   /user/list:
     get:
       tags:
@@ -237,10 +237,10 @@ paths:
           format: int32
           description: 1/0：是否递归获取子部门下面的成员
       responses:
-        '200':
+        "200":
           description: successful operation
           schema:
-            $ref: '#/definitions/ListUserRsp'
+            $ref: "#/definitions/ListUserRsp"
   /user/convert_to_openid:
     post:
       tags:
@@ -261,12 +261,12 @@ paths:
           name: body
           required: true
           schema:
-            $ref: '#/definitions/ConvertToOpenidReq'
+            $ref: "#/definitions/ConvertToOpenidReq"
       responses:
-        '200':
+        "200":
           description: successful operation
           schema:
-            $ref: '#/definitions/ConvertToOpenidRsp'
+            $ref: "#/definitions/ConvertToOpenidRsp"
   /user/authsucc:
     get:
       tags:
@@ -285,10 +285,10 @@ paths:
           required: true
           type: string
       responses:
-        '200':
+        "200":
           description: successful operation
           schema:
-            $ref: '#/definitions/BaseResponse'
+            $ref: "#/definitions/BaseResponse"
   /batch/invite:
     post:
       tags:
@@ -308,13 +308,42 @@ paths:
           name: body
           required: true
           schema:
-            $ref: '#/definitions/InviteReq'
+            $ref: "#/definitions/InviteReq"
       responses:
-        '200':
+        "200":
           description: successful operation
           schema:
-            $ref: '#/definitions/InviteRsp'
+            $ref: "#/definitions/InviteRsp"
+  /corp/get_join_qrcode:
+    get:
+      summary: 获取加入企业二维码
+      operationId: get_join_qrcode
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: query
+          name: size_type
+          type: string
+          required: false
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetJoinQrcodeRsp"
 definitions:
+  GetJoinQrcodeRsp:
+    title: GetJoinQrcodeRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          join_qrcode:
+            type: string
   InviteReq:
     title: InviteReq
     description: InviteReq
@@ -334,7 +363,7 @@ definitions:
           type: string
   InviteRsp:
     allOf:
-      - $ref: '#/definitions/BaseResponse'
+      - $ref: "#/definitions/BaseResponse"
       - type: object
         properties:
           invaliduser:
@@ -355,7 +384,7 @@ definitions:
         type: string
   ConvertToOpenidRsp:
     allOf:
-      - $ref: '#/definitions/BaseResponse'
+      - $ref: "#/definitions/BaseResponse"
       - type: object
         properties:
           openid:
@@ -363,17 +392,17 @@ definitions:
   ListUserRsp:
     description: ListUserRsp
     allOf:
-      - $ref: '#/definitions/BaseResponse'
+      - $ref: "#/definitions/BaseResponse"
       - type: object
         properties:
           userlist:
             type: array
             items:
-              schema: '#/definitions/User'
+              schema: "#/definitions/User"
   SimplelistRsp:
     description: SimplelistRsp
     allOf:
-      - $ref: '#/definitions/BaseResponse'
+      - $ref: "#/definitions/BaseResponse"
       - type: object
         properties:
           userlist:
@@ -450,17 +479,17 @@ definitions:
       extattr:
         type: object
         schema:
-          $ref: '#/definitions/ExtAttrs'
+          $ref: "#/definitions/ExtAttrs"
       external_position:
         type: string
       external_profile:
         type: object
         schema:
-          $ref: '#/definitions/ExternalProfile'
+          $ref: "#/definitions/ExternalProfile"
   GetUserRsp:
     allOf:
-    - $ref: '#/definitions/User'
-    - $ref: '#/definitions/BaseResponse'
+      - $ref: "#/definitions/User"
+      - $ref: "#/definitions/BaseResponse"
   User:
     title: User
     description: User
@@ -535,13 +564,13 @@ definitions:
       external_profile:
         type: object
         schema:
-          $ref: '#/definitions/ExternalProfile'
+          $ref: "#/definitions/ExternalProfile"
         description: 成员对外属性
       extattr:
         type: object
         description: 自定义字段
         schema:
-          $ref: '#/definitions/ExtAttrs'
+          $ref: "#/definitions/ExtAttrs"
   ExternalProfile:
     title: ExternalProfile
     description: ExternalProfile
@@ -552,7 +581,7 @@ definitions:
       external_attr:
         type: array
         items:
-          $ref: '#/definitions/ExtAttr'
+          $ref: "#/definitions/ExtAttr"
   CreateUserReq:
     title: CreateUserReq
     description: CreateUserReq
@@ -610,7 +639,7 @@ definitions:
         type: object
         description: 自定义字段
         schema:
-          $ref: '#/definitions/ExtAttrs'
+          $ref: "#/definitions/ExtAttrs"
   ExtAttrs:
     title: ExtAttrs
     type: object
@@ -618,7 +647,7 @@ definitions:
       attrs:
         type: array
         items:
-          $ref: '#/definitions/ExtAttr'
+          $ref: "#/definitions/ExtAttr"
   ExtAttr:
     title: ExtAttr
     type: object
@@ -634,19 +663,19 @@ definitions:
         type: map
   TokenRsp:
     allOf:
-    - $ref: '#/definitions/BaseResponse'
+      - $ref: "#/definitions/BaseResponse"
     title: TokenRsp
     description: TokenRsp
     type: object
     properties:
       access_token:
-        type: string  
+        type: string
       expires_in:
         type: integer
         format: int64
   GetApiDomainIpRsp:
     allOf:
-    - $ref: '#/definitions/BaseResponse'
+      - $ref: "#/definitions/BaseResponse"
     title: GetApiDomainIpRsp
     description: GetApiDomainIpRsp
     type: object
@@ -656,8 +685,8 @@ definitions:
         items:
           type: string
   BaseResponse:
-    title: 
-    description: 
+    title:
+    description:
     type: object
     properties:
       errcode:

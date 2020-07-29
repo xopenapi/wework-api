@@ -32,6 +32,7 @@ All URIs are relative to *https://qyapi.weixin.qq.com/cgi-bin*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**GetJoinQrcode**](docs/DefaultApi.md#getjoinqrcode) | **Get** /corp/get_join_qrcode | 获取加入企业二维码
 *TokenApi* | [**GetApiDomainIp**](docs/TokenApi.md#getapidomainip) | **Get** /get_api_domain_ip | 获取企业微信API域名IP段
 *TokenApi* | [**Gettoken**](docs/TokenApi.md#gettoken) | **Get** /gettoken | 每个应用有独立的secret，获取到的access_token只能本应用使用，所以每个应用的access_token应该分开来获取
 *UserApi* | [**Authsucc**](docs/UserApi.md#authsucc) | **Get** /user/authsucc | 二次验证
@@ -58,6 +59,8 @@ Class | Method | HTTP request | Description
  - [ExtAttrs](docs/ExtAttrs.md)
  - [ExternalProfile](docs/ExternalProfile.md)
  - [GetApiDomainIpRsp](docs/GetApiDomainIpRsp.md)
+ - [GetJoinQrcodeRsp](docs/GetJoinQrcodeRsp.md)
+ - [GetJoinQrcodeRspAllOf](docs/GetJoinQrcodeRspAllOf.md)
  - [GetUserRsp](docs/GetUserRsp.md)
  - [InviteReq](docs/InviteReq.md)
  - [InviteRsp](docs/InviteRsp.md)
