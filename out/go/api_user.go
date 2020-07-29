@@ -22,8 +22,8 @@ var (
 	_ _context.Context
 )
 
-// DefaultApiService DefaultApi service
-type DefaultApiService service
+// UserApiService UserApi service
+type UserApiService service
 
 /*
 Batchdelete 批量删除成员
@@ -32,7 +32,7 @@ Batchdelete 批量删除成员
  * @param body
 @return BaseResponse
 */
-func (a *DefaultApiService) Batchdelete(ctx _context.Context, body BatchDeleteUserReq) (BaseResponse, *_nethttp.Response, error) {
+func (a *UserApiService) Batchdelete(ctx _context.Context, body BatchDeleteUserReq) (BaseResponse, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
@@ -104,6 +104,84 @@ func (a *DefaultApiService) Batchdelete(ctx _context.Context, body BatchDeleteUs
 }
 
 /*
+ConvertToOpenid userid与openid互换
+userid转openid
+ * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
+ * @param body
+@return InlineResponse200
+*/
+func (a *UserApiService) ConvertToOpenid(ctx _context.Context, body ConvertToOpenidReq) (InlineResponse200, *_nethttp.Response, error) {
+	var (
+		localVarHTTPMethod   = _nethttp.MethodPost
+		localVarPostBody     interface{}
+		localVarFormFileName string
+		localVarFileName     string
+		localVarFileBytes    []byte
+		localVarReturnValue  InlineResponse200
+	)
+
+	// create path and map variables
+	localVarPath := a.client.cfg.BasePath + "/user/convert_to_openid"
+	localVarHeaderParams := make(map[string]string)
+	localVarQueryParams := _neturl.Values{}
+	localVarFormParams := _neturl.Values{}
+
+	// to determine the Content-Type header
+	localVarHTTPContentTypes := []string{"application/json"}
+
+	// set Content-Type header
+	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
+	if localVarHTTPContentType != "" {
+		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
+	}
+
+	// to determine the Accept header
+	localVarHTTPHeaderAccepts := []string{"application/json"}
+
+	// set Accept header
+	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
+	if localVarHTTPHeaderAccept != "" {
+		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
+	}
+	// body params
+	localVarPostBody = &body
+	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
+	if err != nil {
+		return localVarReturnValue, nil, err
+	}
+
+	localVarHTTPResponse, err := a.client.callAPI(r)
+	if err != nil || localVarHTTPResponse == nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
+	localVarHTTPResponse.Body.Close()
+	if err != nil {
+		return localVarReturnValue, localVarHTTPResponse, err
+	}
+
+	if localVarHTTPResponse.StatusCode >= 300 {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: localVarHTTPResponse.Status,
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+	if err != nil {
+		newErr := GenericOpenAPIError{
+			body:  localVarBody,
+			error: err.Error(),
+		}
+		return localVarReturnValue, localVarHTTPResponse, newErr
+	}
+
+	return localVarReturnValue, localVarHTTPResponse, nil
+}
+
+/*
 Create 创建成员
 创建成员
  * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
@@ -111,7 +189,7 @@ Create 创建成员
  * @param body
 @return BaseResponse
 */
-func (a *DefaultApiService) Create(ctx _context.Context, accessToken string, body CreateUserReq) (BaseResponse, *_nethttp.Response, error) {
+func (a *UserApiService) Create(ctx _context.Context, accessToken string, body CreateUserReq) (BaseResponse, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}
@@ -191,7 +269,7 @@ Delete 删除成员
  * @param userid
 @return BaseResponse
 */
-func (a *DefaultApiService) Delete(ctx _context.Context, accessToken string, userid string) (BaseResponse, *_nethttp.Response, error) {
+func (a *UserApiService) Delete(ctx _context.Context, accessToken string, userid string) (BaseResponse, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
@@ -270,7 +348,7 @@ Get 读取成员
  * @param userid
 @return GetUserRsp
 */
-func (a *DefaultApiService) Get(ctx _context.Context, accessToken string, userid string) (GetUserRsp, *_nethttp.Response, error) {
+func (a *UserApiService) Get(ctx _context.Context, accessToken string, userid string) (GetUserRsp, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
@@ -341,82 +419,6 @@ func (a *DefaultApiService) Get(ctx _context.Context, accessToken string, userid
 	return localVarReturnValue, localVarHTTPResponse, nil
 }
 
-/*
-GetApiDomainIp 获取企业微信API域名IP段
- * @param ctx _context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
- * @param accessToken
-@return GetApiDomainIpRsp
-*/
-func (a *DefaultApiService) GetApiDomainIp(ctx _context.Context, accessToken string) (GetApiDomainIpRsp, *_nethttp.Response, error) {
-	var (
-		localVarHTTPMethod   = _nethttp.MethodGet
-		localVarPostBody     interface{}
-		localVarFormFileName string
-		localVarFileName     string
-		localVarFileBytes    []byte
-		localVarReturnValue  GetApiDomainIpRsp
-	)
-
-	// create path and map variables
-	localVarPath := a.client.cfg.BasePath + "/get_api_domain_ip"
-	localVarHeaderParams := make(map[string]string)
-	localVarQueryParams := _neturl.Values{}
-	localVarFormParams := _neturl.Values{}
-
-	localVarQueryParams.Add("access_token", parameterToString(accessToken, ""))
-	// to determine the Content-Type header
-	localVarHTTPContentTypes := []string{}
-
-	// set Content-Type header
-	localVarHTTPContentType := selectHeaderContentType(localVarHTTPContentTypes)
-	if localVarHTTPContentType != "" {
-		localVarHeaderParams["Content-Type"] = localVarHTTPContentType
-	}
-
-	// to determine the Accept header
-	localVarHTTPHeaderAccepts := []string{"application/json"}
-
-	// set Accept header
-	localVarHTTPHeaderAccept := selectHeaderAccept(localVarHTTPHeaderAccepts)
-	if localVarHTTPHeaderAccept != "" {
-		localVarHeaderParams["Accept"] = localVarHTTPHeaderAccept
-	}
-	r, err := a.client.prepareRequest(ctx, localVarPath, localVarHTTPMethod, localVarPostBody, localVarHeaderParams, localVarQueryParams, localVarFormParams, localVarFormFileName, localVarFileName, localVarFileBytes)
-	if err != nil {
-		return localVarReturnValue, nil, err
-	}
-
-	localVarHTTPResponse, err := a.client.callAPI(r)
-	if err != nil || localVarHTTPResponse == nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	localVarBody, err := _ioutil.ReadAll(localVarHTTPResponse.Body)
-	localVarHTTPResponse.Body.Close()
-	if err != nil {
-		return localVarReturnValue, localVarHTTPResponse, err
-	}
-
-	if localVarHTTPResponse.StatusCode >= 300 {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: localVarHTTPResponse.Status,
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	err = a.client.decode(&localVarReturnValue, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
-	if err != nil {
-		newErr := GenericOpenAPIError{
-			body:  localVarBody,
-			error: err.Error(),
-		}
-		return localVarReturnValue, localVarHTTPResponse, newErr
-	}
-
-	return localVarReturnValue, localVarHTTPResponse, nil
-}
-
 // ListOpts Optional parameters for the method 'List'
 type ListOpts struct {
     FetchChild optional.Int32
@@ -432,7 +434,7 @@ List 获取部门成员详情
  * @param "FetchChild" (optional.Int32) -  1/0：是否递归获取子部门下面的成员
 @return ListUserRsp
 */
-func (a *DefaultApiService) List(ctx _context.Context, accessToken string, departmentId int32, localVarOptionals *ListOpts) (ListUserRsp, *_nethttp.Response, error) {
+func (a *UserApiService) List(ctx _context.Context, accessToken string, departmentId int32, localVarOptionals *ListOpts) (ListUserRsp, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
@@ -521,7 +523,7 @@ Simplelist 获取部门成员
  * @param "FetchChild" (optional.Int32) - 
 @return SimplelistRsp
 */
-func (a *DefaultApiService) Simplelist(ctx _context.Context, accessToken string, departmentId int32, localVarOptionals *SimplelistOpts) (SimplelistRsp, *_nethttp.Response, error) {
+func (a *UserApiService) Simplelist(ctx _context.Context, accessToken string, departmentId int32, localVarOptionals *SimplelistOpts) (SimplelistRsp, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodGet
 		localVarPostBody     interface{}
@@ -602,7 +604,7 @@ Update 更新成员
  * @param body
 @return BaseResponse
 */
-func (a *DefaultApiService) Update(ctx _context.Context, body UpdateUserReq) (BaseResponse, *_nethttp.Response, error) {
+func (a *UserApiService) Update(ctx _context.Context, body UpdateUserReq) (BaseResponse, *_nethttp.Response, error) {
 	var (
 		localVarHTTPMethod   = _nethttp.MethodPost
 		localVarPostBody     interface{}

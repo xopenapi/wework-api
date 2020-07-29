@@ -54,6 +54,8 @@ paths:
                 $ref: '#/components/schemas/GetApiDomainIpRsp'
           description: successful operation
       summary: 获取企业微信API域名IP段
+      tags:
+      - token
   /user/create:
     post:
       description: 创建成员
@@ -78,6 +80,8 @@ paths:
                 $ref: '#/components/schemas/BaseResponse'
           description: successful operation
       summary: 创建成员
+      tags:
+      - user
       x-codegen-request-body-name: body
   /user/get:
     get:
@@ -102,6 +106,8 @@ paths:
                 $ref: '#/components/schemas/GetUserRsp'
           description: successful operation
       summary: 读取成员
+      tags:
+      - user
   /user/update:
     post:
       description: 更新成员
@@ -120,6 +126,8 @@ paths:
                 $ref: '#/components/schemas/BaseResponse'
           description: successful operation
       summary: 更新成员
+      tags:
+      - user
       x-codegen-request-body-name: body
   /user/delete:
     get:
@@ -144,6 +152,8 @@ paths:
                 $ref: '#/components/schemas/BaseResponse'
           description: successful operation
       summary: 删除成员
+      tags:
+      - user
   /user/batchdelete:
     post:
       description: 批量删除成员
@@ -162,6 +172,8 @@ paths:
                 $ref: '#/components/schemas/BaseResponse'
           description: successful operation
       summary: 批量删除成员
+      tags:
+      - user
       x-codegen-request-body-name: body
   /user/simplelist:
     get:
@@ -192,6 +204,8 @@ paths:
                 $ref: '#/components/schemas/SimplelistRsp'
           description: successful operation
       summary: 获取部门成员
+      tags:
+      - user
   /user/list:
     get:
       description: 获取部门成员详情
@@ -224,8 +238,35 @@ paths:
                 $ref: '#/components/schemas/ListUserRsp'
           description: successful operation
       summary: 获取部门成员详情
+      tags:
+      - user
+  /user/convert_to_openid:
+    post:
+      description: userid转openid
+      operationId: convert_to_openid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConvertToOpenidReq'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+          description: successful operation
+      summary: userid与openid互换
+      tags:
+      - user
+      x-codegen-request-body-name: body
 components:
   schemas:
+    ConvertToOpenidReq:
+      allOf:
+      - $ref: '#/components/schemas/BaseResponse'
+      - $ref: '#/components/schemas/ConvertToOpenidReq_allOf'
     ListUserRsp:
       allOf:
       - $ref: '#/components/schemas/BaseResponse'
@@ -554,6 +595,21 @@ components:
         errmsg:
           type: string
       type: object
+    inline_response_200:
+      example:
+        BaseResponse:
+          errcode: errcode
+          errmsg: errmsg
+        openid: openid
+      properties:
+        BaseResponse:
+          $ref: '#/components/schemas/BaseResponse'
+        openid:
+          type: string
+    ConvertToOpenidReq_allOf:
+      properties:
+        userid:
+          type: string
     ListUserRsp_allOf:
       properties:
         userlist:

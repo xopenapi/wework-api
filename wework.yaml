@@ -41,6 +41,8 @@ paths:
             $ref: '#/definitions/TokenRsp'
   /get_api_domain_ip:
     get:
+      tags:
+        - token
       summary: 获取企业微信API域名IP段
       description: ''
       operationId: get_api_domain_ip
@@ -58,6 +60,8 @@ paths:
             $ref: '#/definitions/GetApiDomainIpRsp'
   /user/create:
     post:
+      tags:
+        - user
       summary: 创建成员
       description: 创建成员
       operationId: create
@@ -82,6 +86,8 @@ paths:
             $ref: '#/definitions/BaseResponse'
   /user/get:
     get:
+      tags:
+        - user
       summary: 读取成员
       description: 读取成员
       operationId: get
@@ -103,6 +109,8 @@ paths:
             $ref: '#/definitions/GetUserRsp'
   /user/update:
     post:
+      tags:
+        - user
       summary: 更新成员
       description: 更新成员
       operationId: update
@@ -123,6 +131,8 @@ paths:
             $ref: '#/definitions/BaseResponse'
   /user/delete:
     get:
+      tags:
+        - user
       summary: 删除成员
       description: 删除成员
       operationId: delete
@@ -146,6 +156,8 @@ paths:
             $ref: '#/definitions/BaseResponse'
   /user/batchdelete:
     post:
+      tags:
+        - user
       summary: 批量删除成员
       description: 批量删除成员
       operationId: batchdelete
@@ -166,6 +178,8 @@ paths:
             $ref: '#/definitions/BaseResponse'
   /user/simplelist:
     get:
+      tags:
+        - user
       summary: 获取部门成员
       description: 获取部门成员
       operationId: simplelist
@@ -195,6 +209,8 @@ paths:
             $ref: '#/definitions/SimplelistRsp'
   /user/list:
     get:
+      tags:
+        - user
       summary: 获取部门成员详情
       description: 获取部门成员详情
       operationId: list
@@ -225,7 +241,41 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/ListUserRsp'
+  /user/convert_to_openid:
+    post:
+      tags:
+        - user
+      summary: userid与openid互换
+      description: userid转openid
+      operationId: convert_to_openid
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/ConvertToOpenidReq'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            allOf:
+              - $ref: '#/definitions/BaseResponse'
+              - type: object
+                properties:
+                  openid:
+                    type: string
 definitions:
+  ConvertToOpenidReq:
+    allOf:
+      - $ref: '#/definitions/BaseResponse'
+      - type: object
+        properties:
+          userid:
+            type: string
   ListUserRsp:
     description: ListUserRsp
     allOf:

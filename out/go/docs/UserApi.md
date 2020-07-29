@@ -1,18 +1,17 @@
-# \DefaultApi
+# \UserApi
 
 All URIs are relative to *https://qyapi.weixin.qq.com/cgi-bin*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
-[**Batchdelete**](DefaultApi.md#Batchdelete) | **Post** /user/batchdelete | 批量删除成员
-[**ConvertToOpenid**](DefaultApi.md#ConvertToOpenid) | **Post** /user/convert_to_openid | userid与openid互换
-[**Create**](DefaultApi.md#Create) | **Post** /user/create | 创建成员
-[**Delete**](DefaultApi.md#Delete) | **Get** /user/delete | 删除成员
-[**Get**](DefaultApi.md#Get) | **Get** /user/get | 读取成员
-[**GetApiDomainIp**](DefaultApi.md#GetApiDomainIp) | **Get** /get_api_domain_ip | 获取企业微信API域名IP段
-[**List**](DefaultApi.md#List) | **Get** /user/list | 获取部门成员详情
-[**Simplelist**](DefaultApi.md#Simplelist) | **Get** /user/simplelist | 获取部门成员
-[**Update**](DefaultApi.md#Update) | **Post** /user/update | 更新成员
+[**Batchdelete**](UserApi.md#Batchdelete) | **Post** /user/batchdelete | 批量删除成员
+[**ConvertToOpenid**](UserApi.md#ConvertToOpenid) | **Post** /user/convert_to_openid | userid与openid互换
+[**Create**](UserApi.md#Create) | **Post** /user/create | 创建成员
+[**Delete**](UserApi.md#Delete) | **Get** /user/delete | 删除成员
+[**Get**](UserApi.md#Get) | **Get** /user/get | 读取成员
+[**List**](UserApi.md#List) | **Get** /user/list | 获取部门成员详情
+[**Simplelist**](UserApi.md#Simplelist) | **Get** /user/simplelist | 获取部门成员
+[**Update**](UserApi.md#Update) | **Post** /user/update | 更新成员
 
 
 
@@ -64,7 +63,7 @@ userid转openid
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 **ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**body** | [**InlineObject**](InlineObject.md)|  | 
+**body** | [**ConvertToOpenidReq**](ConvertToOpenidReq.md)|  | 
 
 ### Return type
 
@@ -174,38 +173,6 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**GetUserRsp**](GetUserRsp.md)
-
-### Authorization
-
-No authorization required
-
-### HTTP request headers
-
-- **Content-Type**: Not defined
-- **Accept**: application/json
-
-[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
-[[Back to Model list]](../README.md#documentation-for-models)
-[[Back to README]](../README.md)
-
-
-## GetApiDomainIp
-
-> GetApiDomainIpRsp GetApiDomainIp(ctx, accessToken)
-
-获取企业微信API域名IP段
-
-### Required Parameters
-
-
-Name | Type | Description  | Notes
-------------- | ------------- | ------------- | -------------
-**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
-**accessToken** | **string**|  | 
-
-### Return type
-
-[**GetApiDomainIpRsp**](GetApiDomainIpRsp.md)
 
 ### Authorization
 
