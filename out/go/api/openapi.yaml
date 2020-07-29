@@ -244,6 +244,12 @@ paths:
     post:
       description: userid转openid
       operationId: convert_to_openid
+      parameters:
+      - in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
@@ -261,8 +267,89 @@ paths:
       tags:
       - user
       x-codegen-request-body-name: body
+  /user/authsucc:
+    get:
+      operationId: authsucc
+      parameters:
+      - in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: userid
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BaseResponse'
+          description: successful operation
+      summary: 二次验证
+      tags:
+      - user
+  /batch/invite:
+    post:
+      operationId: invite
+      parameters:
+      - in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InviteReq'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InviteRsp'
+          description: successful operation
+      summary: 邀请成员
+      tags:
+      - user
+      x-codegen-request-body-name: body
 components:
   schemas:
+    InviteReq:
+      description: InviteReq
+      example:
+        tag:
+        - tag
+        - tag
+        user:
+        - user
+        - user
+        party:
+        - party
+        - party
+      properties:
+        user:
+          items:
+            type: string
+          type: array
+        party:
+          items:
+            type: string
+          type: array
+        tag:
+          items:
+            type: string
+          type: array
+      title: InviteReq
+      type: object
+    InviteRsp:
+      allOf:
+      - $ref: '#/components/schemas/BaseResponse'
+      - $ref: '#/components/schemas/InviteRsp_allOf'
     ConvertToOpenidReq:
       example:
         userid: userid
@@ -602,6 +689,20 @@ components:
         errmsg:
           type: string
       type: object
+    InviteRsp_allOf:
+      properties:
+        invaliduser:
+          items:
+            type: string
+          type: array
+        invalidparty:
+          items:
+            type: string
+          type: array
+        invalidtag:
+          items:
+            type: string
+          type: array
     ConvertToOpenidRsp_allOf:
       properties:
         openid:

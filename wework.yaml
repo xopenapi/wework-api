@@ -253,6 +253,10 @@ paths:
       produces:
         - application/json
       parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
         - in: body
           name: body
           required: true
@@ -263,7 +267,88 @@ paths:
           description: successful operation
           schema:
             $ref: '#/definitions/ConvertToOpenidRsp'
+  /user/authsucc:
+    get:
+      tags:
+        - user
+      summary: 二次验证
+      operationId: authsucc
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: query
+          name: userid
+          required: true
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/BaseResponse'
+  /batch/invite:
+    post:
+      tags:
+        - user
+      summary: 邀请成员
+      operationId: invite
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/InviteReq'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            $ref: '#/definitions/InviteRsp'
 definitions:
+  InviteReq:
+    title: InviteReq
+    description: InviteReq
+    type: object
+    properties:
+      user:
+        type: array
+        items:
+          type: string
+      party:
+        type: array
+        items:
+          type: string
+      tag:
+        type: array
+        items:
+          type: string
+  InviteRsp:
+    allOf:
+      - $ref: '#/definitions/BaseResponse'
+      - type: object
+        properties:
+          invaliduser:
+            type: array
+            items:
+              type: string
+          invalidparty:
+            type: array
+            items:
+              type: string
+          invalidtag:
+            type: array
+            items:
+              type: string
   ConvertToOpenidReq:
     properties:
       userid:
