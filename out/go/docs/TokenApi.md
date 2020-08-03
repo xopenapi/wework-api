@@ -5,7 +5,7 @@ All URIs are relative to *https://qyapi.weixin.qq.com/cgi-bin*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**GetApiDomainIp**](TokenApi.md#GetApiDomainIp) | **Get** /get_api_domain_ip | 获取企业微信API域名IP段
-[**Gettoken**](TokenApi.md#Gettoken) | **Get** /gettoken | 每个应用有独立的secret，获取到的access_token只能本应用使用，所以每个应用的access_token应该分开来获取
+[**GetToken**](TokenApi.md#GetToken) | **Get** /gettoken | 每个应用有独立的secret，获取到的access_token只能本应用使用，所以每个应用的access_token应该分开来获取
 
 
 
@@ -41,9 +41,9 @@ No authorization required
 [[Back to README]](../README.md)
 
 
-## Gettoken
+## GetToken
 
-> TokenRsp Gettoken(ctx, corpid, corpsecret)
+> TokenRsp GetToken(ctx, corpid, corpsecret)
 
 每个应用有独立的secret，获取到的access_token只能本应用使用，所以每个应用的access_token应该分开来获取
 

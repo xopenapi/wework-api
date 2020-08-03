@@ -9,11 +9,12 @@ info:
 servers:
 - url: https://qyapi.weixin.qq.com/cgi-bin
 tags:
-- name: token
+- description: ""
+  name: token
 paths:
   /gettoken:
     get:
-      operationId: gettoken
+      operationId: GetToken
       parameters:
       - description: 企业ID
         in: query
@@ -338,8 +339,148 @@ paths:
                 $ref: '#/components/schemas/GetJoinQrcodeRsp'
           description: successful operation
       summary: 获取加入企业二维码
+  /message/send:
+    post:
+      description: 应用支持推送文本、图片、视频、文件、图文等类型
+      operationId: send
+      parameters:
+      - in: query
+        name: access_token
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendMessageReq'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendMessageRsp'
+          description: successful operation
+      summary: 发送消息
+      tags:
+      - message
+      x-codegen-request-body-name: body
 components:
   schemas:
+    SendMessageRsp:
+      allOf:
+      - $ref: '#/components/schemas/BaseResponse'
+      - $ref: '#/components/schemas/SendMessageRsp_allOf'
+    SendMessageReq:
+      example:
+        voice:
+          media_id: media_id
+        news:
+          articles:
+          - picurl: picurl
+            description: description
+            title: title
+            url: url
+          - picurl: picurl
+            description: description
+            title: title
+            url: url
+        image:
+          media_id: media_id
+        taskcard:
+          description: description
+          task_id: task_id
+          title: title
+          btn:
+          - color: color
+            name: name
+            key: key
+            is_bold: true
+            replace_name: replace_name
+          - color: color
+            name: name
+            key: key
+            is_bold: true
+            replace_name: replace_name
+          url: url
+        agentid: 0
+        touser: touser
+        mpnews:
+          articles:
+          - thumb_media_id: thumb_media_id
+            author: author
+            digest: digest
+            content_source_url: content_source_url
+            title: title
+            content: content
+          - thumb_media_id: thumb_media_id
+            author: author
+            digest: digest
+            content_source_url: content_source_url
+            title: title
+            content: content
+        totag: totag
+        textcard:
+          btntxt: btntxt
+          description: description
+          title: title
+          url: url
+        video:
+          media_id: media_id
+          description: description
+          title: title
+        miniprogram_notice:
+          content_item:
+          - value: value
+            key: key
+          - value: value
+            key: key
+          appid: appid
+          description: description
+          emphasis_first_item: true
+          page: page
+          title: title
+        markdown:
+          content: content
+        text:
+          content: content
+        msgtype: msgtype
+        toparty: toparty
+      properties:
+        touser:
+          type: string
+        toparty:
+          type: string
+        totag:
+          type: string
+        msgtype:
+          type: string
+        agentid:
+          format: int32
+          type: integer
+        text:
+          $ref: '#/components/schemas/TextMsg'
+        image:
+          $ref: '#/components/schemas/ImageMsg'
+        voice:
+          $ref: '#/components/schemas/VoiceMsg'
+        video:
+          $ref: '#/components/schemas/VideoMsg'
+        textcard:
+          $ref: '#/components/schemas/TextcardMsg'
+        news:
+          $ref: '#/components/schemas/NewsMsg'
+        mpnews:
+          $ref: '#/components/schemas/MPNewsMsg'
+        markdown:
+          $ref: '#/components/schemas/MarkdownMsg'
+        miniprogram_notice:
+          $ref: '#/components/schemas/MiniProgramMsg'
+        taskcard:
+          $ref: '#/components/schemas/TaskcardMsg'
+      title: SendMessageReq
+      type: object
     GetJoinQrcodeRsp:
       allOf:
       - $ref: '#/components/schemas/BaseResponse'
@@ -675,21 +816,236 @@ components:
           type: integer
         name:
           type: string
+        text:
+          $ref: '#/components/schemas/TextMsg'
+        web:
+          properties: {}
+          type: object
       title: ExtAttr
+      type: object
+    TaskcardMsg:
+      example:
+        description: description
+        task_id: task_id
+        title: title
+        btn:
+        - color: color
+          name: name
+          key: key
+          is_bold: true
+          replace_name: replace_name
+        - color: color
+          name: name
+          key: key
+          is_bold: true
+          replace_name: replace_name
+        url: url
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        url:
+          type: string
+        task_id:
+          type: string
+        btn:
+          items:
+            $ref: '#/components/schemas/Btn'
+          type: array
+      type: object
+    Btn:
+      example:
+        color: color
+        name: name
+        key: key
+        is_bold: true
+        replace_name: replace_name
+      properties:
+        key:
+          type: string
+        name:
+          type: string
+        replace_name:
+          type: string
+        color:
+          type: string
+        is_bold:
+          type: boolean
+      type: object
+    MiniProgramMsg:
+      example:
+        content_item:
+        - value: value
+          key: key
+        - value: value
+          key: key
+        appid: appid
+        description: description
+        emphasis_first_item: true
+        page: page
+        title: title
+      properties:
+        appid:
+          type: string
+        page:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        emphasis_first_item:
+          type: boolean
+        content_item:
+          items:
+            $ref: '#/components/schemas/MiniProgramMsg_content_item'
+          type: array
+      type: object
+    MarkdownMsg:
+      example:
+        content: content
+      properties:
+        content:
+          type: string
+      type: object
+    TextMsg:
+      example:
+        content: content
+      properties:
+        content:
+          type: string
+      type: object
+    ImageMsg:
+      example:
+        media_id: media_id
+      properties:
+        media_id:
+          type: string
+      type: object
+    VoiceMsg:
+      example:
+        media_id: media_id
+      properties:
+        media_id:
+          type: string
+      type: object
+    VideoMsg:
+      example:
+        media_id: media_id
+        description: description
+        title: title
+      properties:
+        media_id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+      type: object
+    FileMsg:
+      properties:
+        media_id:
+          type: string
+      type: object
+    TextcardMsg:
+      example:
+        btntxt: btntxt
+        description: description
+        title: title
+        url: url
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        url:
+          type: string
+        btntxt:
+          type: string
+      type: object
+    NewsMsg:
+      example:
+        articles:
+        - picurl: picurl
+          description: description
+          title: title
+          url: url
+        - picurl: picurl
+          description: description
+          title: title
+          url: url
+      properties:
+        articles:
+          items:
+            $ref: '#/components/schemas/ArticleMsg'
+          type: array
+      type: object
+    MPNewsMsg:
+      example:
+        articles:
+        - thumb_media_id: thumb_media_id
+          author: author
+          digest: digest
+          content_source_url: content_source_url
+          title: title
+          content: content
+        - thumb_media_id: thumb_media_id
+          author: author
+          digest: digest
+          content_source_url: content_source_url
+          title: title
+          content: content
+      properties:
+        articles:
+          items:
+            $ref: '#/components/schemas/MPArticleMsg'
+          type: array
+      type: object
+    MPArticleMsg:
+      example:
+        thumb_media_id: thumb_media_id
+        author: author
+        digest: digest
+        content_source_url: content_source_url
+        title: title
+        content: content
+      properties:
+        title:
+          type: string
+        thumb_media_id:
+          type: string
+        author:
+          type: string
+        content_source_url:
+          type: string
+        content:
+          type: string
+        digest:
+          type: string
+      type: object
+    ArticleMsg:
+      example:
+        picurl: picurl
+        description: description
+        title: title
+        url: url
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        url:
+          type: string
+        picurl:
+          type: string
+      type: object
+    WebMsg:
       type: object
     TokenRsp:
       allOf:
       - $ref: '#/components/schemas/BaseResponse'
+      - $ref: '#/components/schemas/TokenRsp_allOf'
       description: TokenRsp
-      example:
-        access_token: access_token
-        expires_in: 0
-      properties:
-        access_token:
-          type: string
-        expires_in:
-          format: int64
-          type: integer
       title: TokenRsp
     GetApiDomainIpRsp:
       allOf:
@@ -707,14 +1063,23 @@ components:
       title: GetApiDomainIpRsp
     BaseResponse:
       example:
-        errcode: errcode
+        errcode: 0
         errmsg: errmsg
       properties:
         errcode:
-          type: string
+          format: int32
+          type: integer
         errmsg:
           type: string
       type: object
+    SendMessageRsp_allOf:
+      properties:
+        invaliduser:
+          type: string
+        invalidparty:
+          type: string
+        invalidtag:
+          type: string
     GetJoinQrcodeRsp_allOf:
       properties:
         join_qrcode:
@@ -743,3 +1108,18 @@ components:
           items:
             type: object
           type: array
+    MiniProgramMsg_content_item:
+      example:
+        value: value
+        key: key
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+    TokenRsp_allOf:
+      properties:
+        access_token:
+          type: string
+        expires_in:
+          type: integer

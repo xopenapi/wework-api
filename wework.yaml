@@ -10,7 +10,7 @@ host: qyapi.weixin.qq.com
 basePath: /cgi-bin
 tags:
   - name: token
-    description:
+    description: ""
 schemes:
   - https
 paths:
@@ -20,7 +20,7 @@ paths:
         - token
       summary: 每个应用有独立的secret，获取到的access_token只能本应用使用，所以每个应用的access_token应该分开来获取
       description: ""
-      operationId: gettoken
+      operationId: GetToken
       produces:
         - application/json
       parameters:
@@ -334,7 +334,79 @@ paths:
           description: successful operation
           schema:
             $ref: "#/definitions/GetJoinQrcodeRsp"
+  /message/send:
+    post:
+      tags:
+        - message
+      summary: 发送消息
+      description: 应用支持推送文本、图片、视频、文件、图文等类型
+      operationId: send
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: access_token
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/SendMessageReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/SendMessageRsp"
 definitions:
+  SendMessageRsp:
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          invaliduser:
+            type: string
+          invalidparty:
+            type: string
+          invalidtag:
+            type: string
+  SendMessageReq:
+    title: SendMessageReq
+    type: object
+    properties:
+      touser:
+        type: string
+      toparty:
+        type: string
+      totag:
+        type: string
+      msgtype:
+        type: string
+      agentid:
+        type: integer
+        format: int32
+      text:
+        $ref: "#/definitions/TextMsg"
+      image:
+        $ref: "#/definitions/ImageMsg"
+      voice:
+        $ref: "#/definitions/VoiceMsg"
+      video:
+        $ref: "#/definitions/VideoMsg"
+      textcard:
+        $ref: "#/definitions/TextcardMsg"
+      news:
+        $ref: "#/definitions/NewsMsg"
+      mpnews:
+        $ref: "#/definitions/MPNewsMsg"
+      markdown:
+        $ref: "#/definitions/MarkdownMsg"
+      miniprogram_notice:
+        $ref: "#/definitions/MiniProgramMsg"
+      taskcard:
+        $ref: "#/definitions/TaskcardMsg"
   GetJoinQrcodeRsp:
     title: GetJoinQrcodeRsp
     type: object
@@ -658,20 +730,159 @@ definitions:
       name:
         type: string
       text:
-        type: map
+        $ref: "#/definitions/TextMsg"
       web:
-        type: map
-  TokenRsp:
-    allOf:
-      - $ref: "#/definitions/BaseResponse"
-    title: TokenRsp
-    description: TokenRsp
+        type: object
+  TaskcardMsg:
     type: object
     properties:
-      access_token:
+      title:
         type: string
-      expires_in:
-        type: integer
+      description:
+        type: string
+      url:
+        type: string
+      task_id:
+        type: string
+      btn:
+        type: array
+        items:
+          $ref: "#/definitions/Btn"
+  Btn:
+    type: object
+    properties:
+      key:
+        type: string
+      name:
+        type: string
+      replace_name:
+        type: string
+      color:
+        type: string
+      is_bold:
+        type: boolean
+  MiniProgramMsg:
+    type: object
+    properties:
+      appid:
+        type: string
+      page:
+        type: string
+      title:
+        type: string
+      description:
+        type: string
+      emphasis_first_item:
+        type: boolean
+      content_item:
+        type: array
+        items:
+          type: object
+          properties:
+            key:
+              type: string
+            value:
+              type: string
+  MarkdownMsg:
+    type: object
+    properties:
+      content:
+        type: string
+  TextMsg:
+    type: object
+    properties:
+      content:
+        type: string
+  ImageMsg:
+    type: object
+    properties:
+      media_id:
+        type: string
+  VoiceMsg:
+    type: object
+    properties:
+      media_id:
+        type: string
+  VideoMsg:
+    type: object
+    properties:
+      media_id:
+        type: string
+      title:
+        type: string
+      description:
+        type: string
+  FileMsg:
+    type: object
+    properties:
+      media_id:
+        type: string
+  TextcardMsg:
+    type: object
+    properties:
+      title:
+        type: string
+      description:
+        type: string
+      url:
+        type: string
+      btntxt:
+        type: string
+  NewsMsg:
+    type: object
+    properties:
+      articles:
+        type: array
+        items:
+          $ref: "#/definitions/ArticleMsg"
+  MPNewsMsg:
+    type: object
+    properties:
+      articles:
+        type: array
+        items:
+          $ref: "#/definitions/MPArticleMsg"
+  MPArticleMsg:
+    type: object
+    properties:
+      title:
+        type: string
+      thumb_media_id:
+        type: string
+      author:
+        type: string
+      content_source_url:
+        type: string
+      content:
+        type: string
+      digest:
+        type: string
+  ArticleMsg:
+    type: object
+    properties:
+      title:
+        type: string
+      description:
+        type: string
+      url:
+        type: string
+      picurl:
+        type: string
+  WebMsg:
+    type: object
+    properties:
+
+  TokenRsp:
+    title: TokenRsp
+    description: TokenRsp
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          access_token:
+            type: string
+          expires_in:
+            type: integer
         format: int64
   GetApiDomainIpRsp:
     allOf:
@@ -690,6 +901,7 @@ definitions:
     type: object
     properties:
       errcode:
-        type: string
+        type: integer
+        format: int32
       errmsg:
         type: string

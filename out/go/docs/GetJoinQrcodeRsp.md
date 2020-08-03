@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Errcode** | **string** |  | [optional] 
+**Errcode** | **int32** |  | [optional] 
 **Errmsg** | **string** |  | [optional] 
 **JoinQrcode** | **string** |  | [optional] 
 
