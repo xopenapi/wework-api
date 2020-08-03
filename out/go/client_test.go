@@ -16,7 +16,7 @@ type conf struct {
 
 func getConf() (*conf, error) {
 	var conf conf
-	yamlFile, err := ioutil.ReadFile("conf.yaml")
+	yamlFile, err := ioutil.ReadFile("../../conf.yaml")
 	if err != nil {
 		log.Printf("yamlFile.Get err #%v ", err)
 	}
