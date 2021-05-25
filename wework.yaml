@@ -20,7 +20,7 @@ paths:
         - token
       summary: 每个应用有独立的secret，获取到的access_token只能本应用使用，所以每个应用的access_token应该分开来获取
       description: ""
-      operationId: GetToken
+      operationId: get_token
       produces:
         - application/json
       parameters:
@@ -64,7 +64,7 @@ paths:
         - user
       summary: 创建成员
       description: 创建成员
-      operationId: create
+      operationId: create_user
       consumes:
         - application/json
       produces:
@@ -90,7 +90,7 @@ paths:
         - user
       summary: 读取成员
       description: 读取成员
-      operationId: get
+      operationId: get_user
       produces:
         - application/json
       parameters:
@@ -113,7 +113,7 @@ paths:
         - user
       summary: 更新成员
       description: 更新成员
-      operationId: update
+      operationId: update_user
       consumes:
         - application/json
       produces:
@@ -135,7 +135,7 @@ paths:
         - user
       summary: 删除成员
       description: 删除成员
-      operationId: delete
+      operationId: delete_user
       consumes:
         - application/json
       produces:
@@ -160,7 +160,7 @@ paths:
         - user
       summary: 批量删除成员
       description: 批量删除成员
-      operationId: batchdelete
+      operationId: batch_delete_user
       consumes:
         - application/json
       produces:
@@ -182,7 +182,7 @@ paths:
         - user
       summary: 获取部门成员
       description: 获取部门成员
-      operationId: simplelist
+      operationId: user_simple_list
       consumes:
         - application/json
       produces:
@@ -213,7 +213,7 @@ paths:
         - user
       summary: 获取部门成员详情
       description: 获取部门成员详情
-      operationId: list
+      operationId: user_list
       consumes:
         - application/json
       produces:
@@ -340,7 +340,7 @@ paths:
         - message
       summary: 发送消息
       description: 应用支持推送文本、图片、视频、文件、图文等类型
-      operationId: send
+      operationId: send_message
       consumes:
         - application/json
       produces:
@@ -451,6 +451,7 @@ definitions:
             items:
               type: string
   ConvertToOpenidReq:
+    type: object
     properties:
       userid:
         type: string
@@ -470,7 +471,7 @@ definitions:
           userlist:
             type: array
             items:
-              schema: "#/definitions/User"
+              $ref: "#/definitions/User"
   SimplelistRsp:
     description: SimplelistRsp
     allOf:
@@ -480,7 +481,8 @@ definitions:
           userlist:
             type: array
             items:
-              schema:
+              type: object
+              properties:
                 userid:
                   type: string
                 name:
@@ -549,16 +551,13 @@ definitions:
         type: integer
         format: int32
       extattr:
-        type: object
-        schema:
-          $ref: "#/definitions/ExtAttrs"
+        $ref: "#/definitions/ExtAttrs"
       external_position:
         type: string
       external_profile:
-        type: object
-        schema:
-          $ref: "#/definitions/ExternalProfile"
+        $ref: "#/definitions/ExternalProfile"
   GetUserRsp:
+    type: object
     allOf:
       - $ref: "#/definitions/User"
       - $ref: "#/definitions/BaseResponse"
@@ -634,15 +633,11 @@ definitions:
         type: string
         description: 对外职务
       external_profile:
-        type: object
-        schema:
-          $ref: "#/definitions/ExternalProfile"
         description: 成员对外属性
+        $ref: "#/definitions/ExternalProfile"
       extattr:
-        type: object
         description: 自定义字段
-        schema:
-          $ref: "#/definitions/ExtAttrs"
+        $ref: "#/definitions/ExtAttrs"
   ExternalProfile:
     title: ExternalProfile
     description: ExternalProfile
@@ -708,10 +703,8 @@ definitions:
         format: int32
         description: 启用/禁用成员。1表示启用成员，0表示禁用成员
       extattr:
-        type: object
         description: 自定义字段
-        schema:
-          $ref: "#/definitions/ExtAttrs"
+        $ref: "#/definitions/ExtAttrs"
   ExtAttrs:
     title: ExtAttrs
     type: object
@@ -870,7 +863,6 @@ definitions:
         type: string
   WebMsg:
     type: object
-    properties:
 
   TokenRsp:
     title: TokenRsp
@@ -896,8 +888,6 @@ definitions:
         items:
           type: string
   BaseResponse:
-    title:
-    description:
     type: object
     properties:
       errcode:

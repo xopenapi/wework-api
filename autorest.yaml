@@ -1,0 +1,9 @@
+input-file:
+  - ./wework.yaml
+add-credentials: false
+generate-metadata: true
+clear-output-folder: true
+title: wework-api
+
+typescript:
+  output-folder: ./out/typescript
