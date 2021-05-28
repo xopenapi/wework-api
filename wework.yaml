@@ -334,6 +334,30 @@ paths:
           description: successful operation
           schema:
             $ref: "#/definitions/GetJoinQrcodeRsp"
+  /user/get_active_stat:
+    post:
+      tags:
+        - user
+      summary: 获取企业活跃成员数
+      operationId: get_active_stat
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: query
+          name: date
+          type: string
+          required: true
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetActiveStatRsp"
   /message/send:
     post:
       tags:
@@ -360,7 +384,2161 @@ paths:
           description: successful operation
           schema:
             $ref: "#/definitions/SendMessageRsp"
+
+  /tag/create:
+    post:
+      tags:
+        - tag
+      summary: 创建内部标签
+      description: 创建企业内部标签
+      operationId: tag_create
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: access_token
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/CreateTagReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/CreateTagRsp"
+  /tag/update:
+    post:
+      tags:
+        - tag
+      summary: 更新内部标签名字
+      description: 更新内部标签名字
+      operationId: tag_update
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateTagReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/BaseResponse"
+  /tag/delete:
+    get:
+      tags:
+        - tag
+      summary: 删除标签
+      description: 删除企业内部标签
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: tag_delete
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: query
+          name: tagid
+          type: integer
+          format: int32
+          required: true
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/BaseResponse"
+  /tag/addtagusers:
+    post:
+      tags:
+        - tag
+      summary: 添加标签成员或部门
+      description: 添加标签成员或部门
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      operationId: tag_addtagusers
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/AddTagUsersReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/BaseResponse"
+  /tag/deltagusers:
+    post:
+      tags:
+        - tag
+      summary: 删除标签成员
+      description: 删除标签成员
+      operationId: tag_deleteusers
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/DeleteTagUsersReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/BaseResponse"
+  /tag/get:
+    get:
+      tags:
+        - tag
+      summary: 获取标签成员
+      description: 获取标签成员
+      operationId: tag_get
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: query
+          name: tagid
+          type: string
+          required: true
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetTagUsersRsp"
+  /tag/list:
+    get:
+      tags:
+        - tag
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      summary: 获取标签列表
+      description: 获取标签列表
+      operationId: tag_list
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetTagListRsp"
+
+  /externalcontact/get_follow_user_list:
+    get:
+      tags:
+        - contact_way
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      operationId: externalcontact_get_follow_user_list
+      summary: 获取配置了客户联系功能的成员列表
+      description: 企业和第三方服务商可通过此接口获取配置了客户联系功能的成员列表。
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetFollowUserListRsp"
+  /externalcontact/add_contact_way:
+    post:
+      tags:
+        - contact_way
+      summary: 配置客户联系「联系我」方式
+      description: 企业可以在管理后台-客户联系-加客户中配置成员的「联系我」的二维码或者小程序按钮，客户通过扫描二维码或点击小程序上的按钮，即可获取成员联系方式,主动联系到成员。企业可通过此接口为具有客户联系功能的成员生成专属的「联系我」二维码或者「联系我」按钮。
+      operationId: externalcontact_add_contact_way
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/AddContactWayReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/AddContactWayRsp"
+  /externalcontact/get_contact_way:
+    post:
+      tags:
+        - contact_way
+      summary: 获取企业已配置的「联系我」方式
+      description: 获取企业配置的「联系我」二维码和「联系我」小程序按钮。
+      operationId: externalcontact_get_contact_way
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/GetContactWayReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetContactWayRsp"
+  /externalcontact/update_contact_way:
+    post:
+      tags:
+        - contact_way
+      summary: 更新企业已配置的「联系我」方式
+      description: 更新企业配置的「联系我」二维码和「联系我」小程序按钮中的信息，如使用人员和备注等。
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      operationId: externalcontact_update_contact_way
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateContactWayReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/BaseResponse"
+  /externalcontact/del_contact_way:
+    post:
+      tags:
+        - contact_way
+      summary: 删除企业已配置的「联系我」方式
+      description: 删除一个已配置的「联系我」二维码或者「联系我」小程序按钮。
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      operationId: externalcontact_del_contact_way
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/DelContactWayReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/BaseResponse"
+  /externalcontact/close_temp_chat:
+    post:
+      tags:
+        - contact_way
+      summary: 结束临时会话
+      description: 将指定的企业成员和客户之前的临时会话断开，断开前会自动下发已配置的结束语。
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      operationId: externalcontact_close_temp_chat
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/CloseTempChatReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/BaseResponse"
+
+  /externalcontact/list:
+    get:
+      tags:
+        - customer
+      summary: 获取客户列表
+      description: 企业可通过此接口获取指定成员添加的客户列表。客户是指配置了客户联系功能的成员所添加的外部联系人。没有配置客户联系功能的成员，所添加的外部联系人将不会作为客户返回。
+      operationId: externalcontact_list
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: query
+          name: userid
+          type: string
+          required: true
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetExternalContactListRsp"
+  /externalcontact/get:
+    get:
+      tags:
+        - customer
+      operationId: externalcontact_get
+      summary: 获取客户详情
+      description: 企业可通过此接口，根据外部联系人的userid（如何获取?），拉取客户详情。
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: query
+          name: external_userid
+          type: string
+          required: true
+        - in: query
+          name: cursor
+          type: string
+          required: false
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetExternalContactDetailRsp"
+  /externalcontact/batch/get_by_user:
+    post:
+      tags:
+        - customer
+      operationId: externalcontact_batch_get_by_user
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      summary: 批量获取客户详情
+      description: 企业/第三方可通过此接口获取指定成员添加的客户信息列表。
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetExternalContactBatchUserReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetExternalContactBatchUserRsp"
+  /externalcontact/remark:
+    post:
+      tags:
+        - customer
+      operationId: externalcontact_remark
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      summary: 修改客户备注信息
+      description: 企业可通过此接口修改指定用户添加的客户的备注信息。
+      parameters:
+        - in: query
+          name: access_token
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: true
+          schema:
+            $ref: "#/definitions/UpdateExternalContactRemarkReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/BaseResponse"
+  /externalcontact/get_corp_tag_list:
+    post:
+      tags:
+        - corp_tag
+      operationId: externalcontact_get_corp_tag_list
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      summary: 获取企业标签库
+      description: 企业可通过此接口获取企业客户标签详情。
+      parameters:
+        - in: query
+          name: access_token
+          required: true
+          type: string
+        - in: body
+          name: body
+          required: false
+          schema:
+            $ref: "#/definitions/GetCorpTagListReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetCorpTagListRsp"
+  /externalcontact/add_corp_tag:
+    post:
+      tags:
+        - corp_tag
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      summary: 添加企业客户标签
+      description: 企业可通过此接口向客户标签库中添加新的标签组和标签，每个企业最多可配置3000个企业标签。
+      operationId: externalcontact_add_corp_tag
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          required: false
+          schema:
+            $ref: "#/definitions/AddCorpTagReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/AddCorpTagRsp"
+  /externalcontact/edit_corp_tag:
+    post:
+      tags:
+        - corp_tag
+      operationId: externalcontact_edit_corp_tag
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      summary: 编辑企业客户标签
+      description: 企业可通过此接口编辑客户标签/标签组的名称或次序值。
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/EditCorpTagReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/BaseResponse"
+  /externalcontact/del_corp_tag:
+    post:
+      tags:
+        - corp_tag
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      operationId: externalcontact_del_corp_tag
+      summary: 删除企业客户标签
+      description: 企业可通过此接口删除客户标签库中的标签，或删除整个标签组。
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/DelCorpTagReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/BaseResponse"
+  /externalcontact/mark_tag:
+    post:
+      tags:
+        - corp_tag
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      summary: 编辑客户企业标签
+      description: 企业可通过此接口为指定成员的客户添加上由企业统一配置的标签。
+      operationId: externalcontact_mark_tag
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/MarkCorpContactTagReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/BaseResponse"
+  /externalcontact/transfer_customer:
+    post:
+      tags:
+        - customer
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: externalcontact_transfer_customer
+      summary: 分配在职成员的客户
+      description: 企业可通过此接口，转接在职成员的客户给其他成员。
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/TransferCustomerReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/TransferCustomerRsp"
+  /externalcontact/transfer_result:
+    post:
+      tags:
+        - customer
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      operationId: externalcontact_transfer_result
+      summary: 查询客户接替状态
+      description: 企业和第三方可通过此接口查询在职成员的客户转接情况。
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetTransferResultReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetTransferResultRsp"
+  /externalcontact/get_unassigned_list:
+    post:
+      tags:
+        - customer
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      operationId: externalcontact_get_unassigned_list
+      summary: 获取待分配的离职成员列表
+      description: 企业和第三方可通过此接口，获取所有离职成员的客户列表，并可进一步调用分配离职成员的客户接口将这些客户重新分配给其他企业成员。
+      parameters:
+        - in: query
+          name: access_token
+          required: true
+          type: string
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetUnassignedListReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetUnassignedListRsp"
+  /externalcontact/resigned/transfer_customer:
+    post:
+      tags:
+        - customer
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: externalcontact_resigned_transfer_customer
+      summary: 分配离职成员的客户
+      description: 企业可通过此接口，分配离职成员的客户给其他成员。
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/ResignedTransferCustomerReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/ResignedTransferCustomerRsp"
+  /externalcontact/resigned/transfer_result:
+    post:
+      tags:
+        - customer
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      operationId: externalcontact_resigned_transfer_result
+      summary: 查询客户接替状态
+      description: 企业和第三方可通过此接口查询离职成员的客户分配情况。
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/ResignedTransferResultReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/ResignedTransferResultRsp"
+  /externalcontact/groupchat/transfer:
+    post:
+      tags:
+        - customer
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: externalcontact_groupchat_transfer
+      summary: 分配离职成员的客户群
+      description: 企业可通过此接口，将已离职成员为群主的群，分配给另一个客服成员。
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GroupchatTransferReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GroupchatTransferRsp"
+  /externalcontact/groupchat/list:
+    post:
+      tags:
+        - group
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      operationId: externalcontact_groupchat_list
+      summary: 获取客户群列表
+      description: 该接口用于获取配置过客户群管理的客户群列表。
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GroupchatListReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GroupchatListRsp"
+  /externalcontact/groupchat/get:
+    post:
+      tags:
+        - group
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      summary: 获取客户群详情
+      description: 通过客户群ID，获取详情。包括群名、群成员列表、群成员入群时间、入群方式。（客户群是由具有客户群使用权限的成员创建的外部群）
+      operationId: externalcontact_groupchat_get
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetGroupchatReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetGroupchatRsp"
+  /externalcontact/get_moment_list:
+    post:
+      tags:
+        - monment
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      operationId: externalcontact_get_moment_list
+      summary: 获取企业全部的发表列表
+      description: 企业和第三方应用可通过该接口获取企业全部的发表内容。
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetMomentListReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetMomentListRsp"
+  /externalcontact/get_moment_task:
+    post:
+      tags:
+        - monment
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      summary: 获取客户朋友圈企业发表的列表
+      description: 企业和第三方应用可通过该接口获取企业发表的朋友圈成员执行情况.第三方应用调用需要企业授权客户朋友圈下获取企业全部的发表记录的权限
+      operationId: externalcontact_get_moment_task
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetMomentTaskReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetMomentTaskRsp"
+  /externalcontact/get_moment_customer_list:
+    post:
+      tags:
+        - monment
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: externalcontact_get_moment_customer_list
+      summary: 获取客户朋友圈发表时选择的可见范围
+      description: 企业和第三方应用可通过该接口获取客户朋友圈创建时，选择的客户可见范围
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetMomentCustomerListReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetMomentCustomerListRsp"
+  /externalcontact/get_moment_send_result:
+    post:
+      tags:
+        - monment
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: externalcontact_get_moment_send_result
+      summary: 获取客户朋友圈发表后的可见客户列表
+      description: 企业和第三方应用可通过该接口获取客户朋友圈发表后，可在微信朋友圈中查看的客户列表
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetMomentSendResultReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetMomentSendResultRsp"
+  /externalcontact/get_moment_comments:
+    post:
+      tags:
+        - monment
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: externalcontact_get_moment_comments
+      summary: 获取客户朋友圈的互动数据
+      description: 企业和第三方应用可通过此接口获取客户朋友圈的互动数据。
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetMomentCommentsReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetMomentCommentsRsp"
+
 definitions:
+  GetMomentCommentsRsp:
+    title: GetMomentCommentsRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          comment_list:
+            type: array
+            items:
+              type: object
+              properties:
+                external_userid:
+                  type: string
+                create_time:
+                  type: integer
+                  format: int32
+          like_list:
+            type: array
+            items:
+              type: object
+              properties:
+                external_userid:
+                  type: string
+                create_time:
+                  type: integer
+                  format: int32
+
+  GetMomentCommentsReq:
+    title: GetMomentCommentsReq
+    type: object
+    properties:
+      moment_id:
+        type: string
+      userid:
+        type: string
+  GetMomentSendResultRsp:
+    title: GetMomentSendResultRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          next_cursor:
+            type: string
+          customer_list:
+            type: array
+            items:
+              type: object
+              properties:
+                external_userid:
+                  type: string
+  GetMomentSendResultReq:
+    title: GetMomentSendResultReq
+    type: object
+    properties:
+      moment_id:
+        type: string
+      userid:
+        type: string
+      cursor:
+        type: string
+      limit:
+        type: integer
+        format: int32
+
+  GetMomentCustomerListRsp:
+    title: GetMomentCustomerListRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          next_cursor:
+            type: string
+          customer_list:
+            type: array
+            items:
+              type: object
+              properties:
+                userid:
+                  type: string
+                external_userid:
+                  type: string
+  GetMomentCustomerListReq:
+    title: GetMomentCustomerListReq
+    type: object
+    properties:
+      moment_id:
+        type: string
+      userid:
+        type: string
+      cursor:
+        type: string
+      limit:
+        type: integer
+        format: int32
+  GetMomentTaskRsp:
+    title: GetMomentTaskRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          next_cursor:
+            type: string
+          task_list:
+            type: array
+            items:
+              type: object
+              properties:
+                userid:
+                  type: string
+                publish_status:
+                  type: integer
+                  format: int32
+  GetMomentTaskReq:
+    title: GetMomentTaskReq
+    type: object
+    properties:
+      moment_id:
+        type: string
+      cursor:
+        type: string
+      limit:
+        type: integer
+        format: int32
+
+  GetMomentListRsp:
+    title: GetMomentListRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          next_cursor:
+            type: string
+          moment_list:
+            type: array
+            items:
+              properties:
+                moment_id:
+                  type: string
+                creator:
+                  type: string
+                create_time:
+                  type: integer
+                  format: int32
+                create_type:
+                  type: integer
+                  format: int32
+                visible_type:
+                  type: integer
+                  format: int32
+                text:
+                  type: object
+                  properties:
+                    content:
+                      type: string
+                image:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      media_id:
+                        type: string
+                video:
+                  type: object
+                  properties:
+                    media_id:
+                      type: string
+                    thumb_media_id:
+                      type: string
+                link:
+                  type: object
+                  properties:
+                    title:
+                      type: string
+                    url:
+                      type: string
+                location:
+                  type: object
+                  properties:
+                    latitude:
+                      type: string
+                    longitude:
+                      type: string
+                    name:
+                      type: string
+
+  GetMomentListReq:
+    title: GetMomentListReq
+    type: object
+    properties:
+      start_time:
+        type: integer
+        format: int32
+        description: 朋友圈记录开始时间。Unix时间戳
+      end_time:
+        type: integer
+        format: int32
+        description: 朋友圈记录结束时间。Unix时间戳
+      creator:
+        type: string
+      filter_type:
+        type: integer
+        format: int32
+        description: 朋友圈类型。0：企业发表 1：个人发表 2：所有，包括个人创建以及企业创建，默认情况下为所有类型
+      cursor:
+        type: string
+      limit:
+        type: integer
+        format: int32
+  GetGroupchatRsp:
+    title: GetGroupchatRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          group_chat:
+            type: object
+            properties:
+              chat_id:
+                type: string
+              name:
+                type: string
+              owner:
+                type: string
+              notice:
+                type: string
+              create_time:
+                type: integer
+                format: int32
+              member_list:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    userid:
+                      type: string
+                    type:
+                      type: integer
+                      format: int32
+                    join_time:
+                      type: integer
+                      format: int32
+                    join_scene:
+                      type: integer
+                      format: int32
+                    invitor:
+                      type: object
+                      properties:
+                        userid:
+                          type: string
+                    unionid:
+                      type: string
+              admin_list:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    userid:
+                      type: string
+
+  GetGroupchatReq:
+    title: GetGroupchatReq
+    type: object
+    properties:
+      chat_id:
+        type: string
+  GroupchatListRsp:
+    title: GroupchatListRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          group_chat_list:
+            type: array
+            items:
+              type: object
+              properties:
+                chat_id:
+                  type: string
+                status:
+                  type: integer
+                  format: int32
+          next_cursor:
+            type: string
+
+  GroupchatListReq:
+    title: GroupchatListReq
+    type: object
+    properties:
+      status_filter:
+        type: integer
+        format: int32
+        description: 客户群跟进状态过滤。0 - 所有列表(即不过滤);1 - 离职待继承;2 - 离职继承中;3 - 离职继承完成;默认为0
+      owner_filter:
+        type: object
+        properties:
+          userid_list:
+            type: array
+            items:
+              type: string
+      cursor:
+        type: string
+      limit:
+        type: integer
+        format: int32
+
+  GroupchatTransferRsp:
+    title: GroupchatTransferRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          failed_chat_list:
+            type: array
+            items:
+              type: object
+              properties:
+                chat_id:
+                  type: string
+                errcode:
+                  type: integer
+                  format: int32
+                errmsg:
+                  type: string
+  GroupchatTransferReq:
+    title: GroupchatTransferReq
+    type: object
+    properties:
+      chat_id_list:
+        type: array
+        items:
+          type: string
+      new_owner:
+        type: string
+
+  ResignedTransferResultRsp:
+    title: ResignedTransferResultRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          customer:
+            type: array
+            items:
+              type: object
+              properties:
+                external_userid:
+                  type: string
+                status:
+                  type: integer
+                  format: int32
+                takeover_time:
+                  type: integer
+                  format: int32
+  ResignedTransferResultReq:
+    title: ResignedTransferResultReq
+    type: object
+    properties:
+      handover_userid:
+        type: string
+      takeover_userid:
+        type: string
+      cursor:
+        type: string
+
+  ResignedTransferCustomerRsp:
+    title: ResignedTransferCustomerRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          customer:
+            type: array
+            items:
+              type: object
+              properties:
+                external_userid:
+                  type: string
+                errcode:
+                  type: integer
+                  format: int32
+
+  ResignedTransferCustomerReq:
+    title: ResignedTransferCustomerReq
+    type: object
+    properties:
+      handover_userid:
+        type: string
+      takeover_userid:
+        type: string
+      external_userid:
+        type: array
+        items:
+          type: string
+
+  GetUnassignedListRsp:
+    title: GetUnassignedListRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          is_last:
+            type: boolean
+          next_cursor:
+            type: string
+          info:
+            type: array
+            items:
+              type: object
+              properties:
+                handover_userid:
+                  type: string
+                external_userid:
+                  type: string
+                dimission_time:
+                  type: integer
+                  format: int32
+
+  GetUnassignedListReq:
+    title: GetUnassignedListReq
+    type: object
+    properties:
+      page_id:
+        type: integer
+        format: int32
+      cursor:
+        type: string
+      page_size:
+        type: integer
+        format: int32
+
+  GetTransferResultRsp:
+    title: GetTransferResultRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: string
+        properties:
+          next_cursor:
+            type: string
+          customer:
+            type: array
+            items:
+              type: object
+              properties:
+                external_userid:
+                  type: string
+                status:
+                  type: integer
+                  format: int32
+                takeover_time:
+                  type: integer
+                  format: int32
+
+  GetTransferResultReq:
+    title: GetTransferResultReq
+    type: object
+    properties:
+      handover_userid:
+        type: string
+      takeover_userid:
+        type: string
+      cursor:
+        type: string
+
+  TransferCustomerRsp:
+    title: TransferCustomerRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          customer:
+            type: array
+            items:
+              type: object
+              properties:
+                external_userid:
+                  type: string
+                errcode:
+                  type: integer
+                  format: int32
+  TransferCustomerReq:
+    title: TransferCustomerReq
+    type: object
+    properties:
+      handover_userid:
+        type: string
+      takeover_userid:
+        type: string
+      external_userid:
+        type: array
+        items:
+          type: string
+      transfer_success_msg:
+        type: string
+
+  MarkCorpContactTagReq:
+    title: MarkCorpTagReq
+    type: object
+    properties:
+      userid:
+        type: string
+      external_userid:
+        type: string
+      add_tag:
+        type: array
+        items:
+          type: string
+      remove_tag:
+        type: array
+        items:
+          type: string
+  DelCorpTagReq:
+    title: DelCorpTagReq
+    type: object
+    properties:
+      tag_id:
+        type: array
+        items:
+          type: string
+      group_id:
+        type: array
+        items:
+          type: string
+      agentid:
+        type: string
+        description: 授权方安装的应用agentid。仅旧的第三方多应用套件需要填此参数
+  EditCorpTagReq:
+    title: EditCorpTagReq
+    type: object
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+      order:
+        type: string
+      agentid:
+        type: integer
+        format: int32
+  AddCorpTagRsp:
+    title: AddCorpTagRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          tag_group:
+            type: object
+            properties:
+              group_id:
+                type: string
+              group_name:
+                type: string
+              create_time:
+                type: integer
+                format: int32
+              order:
+                type: integer
+                format: int32
+              tag:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    cretate_time:
+                      type: integer
+                      format: int32
+                    order:
+                      type: integer
+                      format: int32
+
+  AddCorpTagReq:
+    title: AddCorpTagReq
+    type: object
+    properties:
+      group_id:
+        type: string
+      group_name:
+        type: string
+      order:
+        type: integer
+        format: int32
+      tag:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+            order:
+              type: integer
+              format: int32
+      agentid:
+        type: integer
+        format: int32
+        description: 授权方安装的应用agentid。仅旧的第三方多应用套件需要填此参数
+  GetCorpTagListRsp:
+    title: GetCorpTagListRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          tag_group:
+            type: array
+            items:
+              type: object
+              properties:
+                group_id:
+                  type: string
+                group_name:
+                  type: string
+                create_time:
+                  type: integer
+                  format: int32
+                order:
+                  type: integer
+                  format: int32
+                deleted:
+                  type: boolean
+                tag:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      name:
+                        type: string
+                      create_time:
+                        type: integer
+                        format: int32
+                      order:
+                        type: integer
+                        format: int32
+                      deleted:
+                        type: boolean
+
+  GetCorpTagListReq:
+    title: GetCorpTagListReq
+    type: object
+    properties:
+      tag_id:
+        type: array
+        items:
+          type: string
+      group_id:
+        type: array
+        items:
+          type: string
+
+  UpdateExternalContactRemarkReq:
+    title: UpdateExternalContactRemarkReq
+    type: object
+    properties:
+      userid:
+        type: string
+      external_userid:
+        type: string
+      remark:
+        type: string
+      description:
+        type: string
+      remark_company:
+        type: string
+      remark_mobiles:
+        type: array
+        items:
+          type: string
+      remark_pic_mediaid:
+        type: string
+
+  GetExternalContactBatchUserRsp:
+    title: GetExternalContactBatchUserRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          external_contact_list:
+            type: array
+            items:
+              allOf:
+                - $ref: "#/definitions/ExternalContact"
+                - $ref: "#/definitions/BatchUserFollowInfo"
+
+  BatchUserFollowInfo:
+    type: object
+    properties:
+      follow_info:
+        type: object
+        properties:
+          remark:
+            type: string
+          description:
+            type: string
+          createtime:
+            type: integer
+            format: int32
+          tag_id:
+            type: array
+            items:
+              type: string
+          remark_corp_name:
+            type: string
+          remark_mobiles:
+            type: array
+            items:
+              type: string
+          oper_userid:
+            type: string
+          add_way:
+            type: integer
+            format: int32
+
+  GetExternalContactBatchUserReq:
+    title: GetExternalContactBatchUserReq
+    type: object
+    properties:
+      userid:
+        type: string
+      cursor:
+        type: string
+      limit:
+        type: integer
+        format: int32
+  GetExternalContactDetailRsp:
+    title: GetExternalContactDetailRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          next_cursor:
+            type: string
+          follow_user:
+            type: array
+            items:
+              $ref: "#/definitions/ContactFollowUser"
+          external_contact:
+            $ref: "#/definitions/ExternalContact"
+  ProfileMiniprogram:
+    type: object
+    properties:
+      type:
+        type: integer
+        format: int32
+      name:
+        type: string
+      miniprogram:
+        type: object
+        properties:
+          appid:
+            type: string
+          pagepath:
+            type: string
+          title:
+            type: string
+  ExternalContact:
+    type: object
+    properties:
+      external_contact:
+        type: object
+        properties:
+          external_userid:
+            type: string
+          name:
+            type: string
+          position:
+            type: string
+          avatar:
+            type: string
+          corp_name:
+            type: string
+          corp_full_name:
+            type: string
+          type:
+            type: integer
+            format: int32
+          gender:
+            type: integer
+            format: int32
+          unionid:
+            type: string
+          external_profile:
+            type: object
+            properties:
+              external_attr:
+                type: array
+                items:
+                  allOf:
+                    - $ref: "#/definitions/ProfileText"
+                    - $ref: "#/definitions/ProfileWeb"
+                    - $ref: "#/definitions/ProfileMiniprogram"
+  ProfileWeb:
+    type: object
+    properties:
+      type:
+        type: integer
+        format: int32
+      name:
+        type: string
+      web:
+        type: object
+        properties:
+          url:
+            type: string
+          title:
+            type: string
+  ProfileText:
+    type: object
+    properties:
+      type:
+        type: integer
+        format: int32
+      name:
+        type: string
+      text:
+        type: object
+        properties:
+          value:
+            type: string
+
+  ContactFollowUser:
+    type: object
+    properties:
+      userid:
+        type: string
+      remark:
+        type: string
+      description:
+        type: string
+      createtime:
+        type: integer
+        format: int32
+      remark_corp_name:
+        type: string
+      oper_userid:
+        type: string
+      add_way:
+        type: integer
+        format: int32
+      state:
+        type: string
+      remark_mobiles:
+        type: array
+        items:
+          type: string
+      tags:
+        type: array
+        items:
+          type: object
+          properties:
+            group_name:
+              type: string
+            tag_name:
+              type: string
+            tag_id:
+              type: string
+            type:
+              type: integer
+              format: int32
+
+  GetExternalContactListRsp:
+    title: GetExternalContactListRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          external_userid:
+            type: array
+            items:
+              type: string
+  CloseTempChatReq:
+    title: CloseTempChatReq
+    type: object
+    properties:
+      userid:
+        type: string
+      external_userid:
+        type: string
+  DelContactWayReq:
+    title: DelContactWayReq
+    type: object
+    properties:
+      config_id:
+        type: string
+  UpdateContactWayReq:
+    title: UpdateContactWayReq
+    type: object
+    properties:
+      config_id:
+        type: string
+      remark:
+        type: string
+      skip_verify:
+        type: boolean
+      style:
+        type: integer
+        format: int32
+      state:
+        type: string
+      user:
+        type: array
+        items:
+          type: string
+      party:
+        type: array
+        items:
+          type: integer
+          format: int32
+      expires_in:
+        type: integer
+        format: int32
+        description: 临时会话二维码有效期，以秒为单位
+      chat_expires_in:
+        type: integer
+        format: int32
+      unionid:
+        type: string
+      conclusions:
+        type: object
+        properties:
+          text:
+            type: object
+            properties:
+              content:
+                type: string
+          image:
+            type: object
+            properties:
+              media_id:
+                type: string
+          link:
+            type: object
+            properties:
+              title:
+                type: string
+              picurl:
+                type: string
+              desc:
+                type: string
+              url:
+                type: string
+          miniprogram:
+            type: object
+            properties:
+              title:
+                type: string
+              pic_media_id:
+                type: string
+              appid:
+                type: string
+              page:
+                type: string
+  GetContactWayReq:
+    title: GetContactWayReq
+    type: object
+    properties:
+      config_id:
+        type: string
+  GetContactWayRsp:
+    title: GetContactWayRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          contact_way:
+            type: object
+            properties:
+              config_id:
+                type: string
+              type:
+                type: integer
+                format: int32
+              scene:
+                type: integer
+                format: int32
+              style:
+                type: integer
+                format: int32
+              remark:
+                type: string
+              skip_verify:
+                type: boolean
+              state:
+                type: string
+              user:
+                type: array
+                items:
+                  type: string
+              party:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+              is_temp:
+                type: boolean
+                description: 是否临时会话模式，true表示使用临时会话模式，默认为false
+              expires_in:
+                type: integer
+                format: int32
+              unionid:
+                type: string
+                description: 可进行临时会话的客户unionid，该参数仅在is_temp为true时有效，如不指定则不进行限制
+              conclusions:
+                type: object
+                properties:
+                  text:
+                    type: object
+                    properties:
+                      content:
+                        type: string
+                  image:
+                    type: object
+                    properties:
+                      media_id:
+                        type: string
+                  link:
+                    type: object
+                    properties:
+                      title:
+                        type: string
+                      picurl:
+                        type: string
+                      desc:
+                        type: string
+                      url:
+                        type: string
+                  miniprogram:
+                    type: object
+                    properties:
+                      title:
+                        type: string
+                      pic_media_id:
+                        type: string
+                      appid:
+                        type: string
+                      page:
+                        type: string
+  AddContactWayRsp:
+    title: AddContactWayRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          config_id:
+            type: string
+          qr_code:
+            type: string
+  AddContactWayReq:
+    title: AddContactWayRsp
+    type: object
+    properties:
+      type:
+        type: integer
+        format: int32
+      scene:
+        type: integer
+        format: int32
+      style:
+        type: integer
+        format: int32
+      remark:
+        type: string
+      skip_verify:
+        type: boolean
+      state:
+        type: string
+      user:
+        type: array
+        items:
+          type: string
+      party:
+        type: array
+        items:
+          type: integer
+          format: int32
+      is_temp:
+        type: boolean
+        description: 是否临时会话模式，true表示使用临时会话模式，默认为false
+      expires_in:
+        type: integer
+        format: int32
+      unionid:
+        type: string
+        description: 可进行临时会话的客户unionid，该参数仅在is_temp为true时有效，如不指定则不进行限制
+      conclusions:
+        type: object
+        properties:
+          text:
+            type: object
+            properties:
+              content:
+                type: string
+          image:
+            type: object
+            properties:
+              media_id:
+                type: string
+          link:
+            type: object
+            properties:
+              title:
+                type: string
+              picurl:
+                type: string
+              desc:
+                type: string
+              url:
+                type: string
+          miniprogram:
+            type: object
+            properties:
+              title:
+                type: string
+              pic_media_id:
+                type: string
+              appid:
+                type: string
+              page:
+                type: string
+  GetFollowUserListRsp:
+    title: GetFollowUserListRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          follow_user:
+            type: array
+            items:
+              type: string
+  GetTagListRsp:
+    title: GetTagListRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          taglist:
+            type: array
+            items:
+              $ref: "#/definitions/TagListInfo"
+  TagListInfo:
+    type: object
+    properties:
+      tagid:
+        type: integer
+        format: int32
+      tagname:
+        type: string
+  GetTagUsersRsp:
+    title: GetTagUsersRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          tagname:
+            type: string
+          userlist:
+            type: array
+            items:
+              $ref: "#/definitions/TagUserInfo"
+          partylist:
+            type: array
+            items:
+              type: integer
+              format: int32
+  TagUserInfo:
+    type: object
+    properties:
+      userid:
+        type: string
+      name:
+        type: string
+  DeleteTagUsersReq:
+    title: DeleteTagUsersReq
+    type: object
+    properties:
+      tagid:
+        type: integer
+        format: int32
+      userlist:
+        type: array
+        items:
+          type: string
+      partylist:
+        type: array
+        items:
+          type: integer
+          format: int32
+  AddTagUsersReq:
+    title: AddTagUsers
+    type: object
+    properties:
+      tagid:
+        type: integer
+        format: int32
+      userlist:
+        type: array
+        items:
+          type: string
+      partylist:
+        type: array
+        items:
+          type: integer
+          format: int32
+  UpdateTagReq:
+    title: UpdateTagReq
+    type: object
+    properties:
+      tagid:
+        type: integer
+        format: int32
+      tagname:
+        type: string
+  CreateTagRsp:
+    title: CreateTagRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          tagid:
+            type: integer
+            format: int32
+  CreateTagReq:
+    title: CreateTagReq
+    type: object
+    properties:
+      tagname:
+        type: string
+      tagid:
+        type: integer
+        format: int32
+  GetActiveStatRsp:
+    title: GetActiveStatRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          active_cnt:
+            type: integer
+            format: int32
   SendMessageRsp:
     allOf:
       - $ref: "#/definitions/BaseResponse"
