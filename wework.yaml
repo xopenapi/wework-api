@@ -316,6 +316,8 @@ paths:
             $ref: "#/definitions/InviteRsp"
   /corp/get_join_qrcode:
     get:
+      tags:
+        - user
       summary: 获取加入企业二维码
       operationId: get_join_qrcode
       produces:
@@ -384,6 +386,31 @@ paths:
           description: successful operation
           schema:
             $ref: "#/definitions/SendMessageRsp"
+  /message/update_taskcard:
+    post:
+      tags:
+        - message
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      operationId: message_update_taskcard
+      summary: 更新任务卡片消息状态
+      description: 应用可以发送任务卡片消息，发送之后可再通过接口更新用户任务卡片消息的替换文案信息。
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/UpdateTaskcardReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/UpdateTaskcardRsp"
 
   /tag/create:
     post:
@@ -1271,8 +1298,1696 @@ paths:
           description: successful operation
           schema:
             $ref: "#/definitions/GetMomentCommentsRsp"
-
+  /externalcontact/add_msg_template:
+    post:
+      tags:
+        - groupmsg
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: externalcontact_add_msg_template
+      summary: 创建企业群发
+      description: 企业跟第三方应用可通过此接口添加企业群发消息的任务并通知成员发送给相关客户或客户群。（注：企业微信终端需升级到2.7.5版本及以上）注意：调用该接口并不会直接发送消息给客户/客户群，需要成员确认后才会执行发送（客服人员的企业微信需要升级到2.7.5及以上版本）旧接口创建企业群发已经废弃，接口升级后支持发送视频文件，并且支持最多同时发送9个附件。同一个企业每个自然月内仅可针对一个客户/客户群发送4条消息，超过接收上限的客户将无法再收到群发消息。
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/AddMsgTemplateReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/AddMsgTemplateRsp"
+  /externalcontact/get_groupmsg_list_v2:
+    post:
+      tags:
+        - groupmsg
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      summary: 获取群发记录列表
+      description: 企业和第三方应用可通过此接口获取企业与成员的群发记录。群发任务记录的起止时间间隔不能超过1个月
+      operationId: externalcontact_get_groupmsg_list_v2
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetGroupmsgListV2Req"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetGroupmsgListV2Rsp"
+  /externalcontact/get_groupmsg_task:
+    post:
+      tags:
+        - groupmsg
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: externalcontact_get_groupmsg_task
+      summary: 获取群发成员发送任务列表
+      description: 获取群发成员发送任务列表
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetGroupmsgTaskReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetGroupmsgTaskRsp"
+  /externalcontact/get_groupmsg_send_result:
+    post:
+      tags:
+        - groupmsg
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: externalcontact_get_groupmsg_send_result
+      summary: 获取企业群发成员执行结果
+      description: 获取企业群发成员执行结果
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetGroupmsgSendResultReq"
+      responses:
+        "200":
+          description: successful responses
+          schema:
+            $ref: "#/definitions/GetGroupmsgSendResultRsp"
+  /externalcontact/send_welcome_msg:
+    post:
+      tags:
+        - welcome_msg
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: externalcontact_send_welcome_msg
+      summary: 发送新客户欢迎语
+      description: 企业微信在向企业推送添加外部联系人事件时，会额外返回一个welcome_code，企业以此为凭据调用接口，即可通过成员向新添加的客户发送个性化的欢迎语。为了保证用户体验以及避免滥用，企业仅可在收到相关事件后20秒内调用，且只可调用一次。如果企业已经在管理端为相关成员配置了可用的欢迎语，则推送添加外部联系人事件时不会返回welcome_code。每次添加新客户时可能有多个企业自建应用/第三方应用收到带有welcome_code的回调事件，但仅有最先调用的可以发送成功。后续调用将返回41051（externaluser has started chatting）错误，请用户根据实际使用需求，合理设置应用可见范围，避免冲突。旧接口发送新客户欢迎语已经废弃，接口升级后支持发送视频文件，并且最多支持同时发送9个附件
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/SendWelcomeMsgReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/SendWelcomeMsgRsp"
+  /externalcontact/group_welcome_template/add:
+    post:
+      tags:
+        - welcome_msg
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: externalcontact_group_welcome_template_add
+      summary: 添加入群欢迎语素材
+      description: 企业可通过此API向企业的入群欢迎语素材库中添加素材。每个企业的入群欢迎语素材库中，最多容纳100个素材。text中支持配置多个%NICKNAME%(大小写敏感)形式的欢迎语，当配置了欢迎语占位符后，发送给客户时会自动替换为客户的昵称;text、image、link和miniprogram四者不能同时为空；text与另外三者可以同时发送，此时将会以两条消息的形式触达客户;image、link和miniprogram只能有一个，如果三者同时填，则按image、link、miniprogram的优先顺序取参，也就是说，如果image与link同时传值，则只有image生效。media_id和pic_url只需填写一个，两者同时填写时使用media_id，二者不可同时为空。
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/AddGroupWelcomeTemplateReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/AddGroupWelcomeTemplateRsp"
+  /externalcontact/get_user_behavior_data:
+    post:
+      tags:
+        - user
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: externalcontact_get_user_behavior_data
+      summary: 获取「联系客户统计」数据
+      description: 企业可通过此接口获取成员联系客户的数据，包括发起申请数、新增客户数、聊天数、发送消息数和删除/拉黑成员的客户数等指标。
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetUserBehaviorDataReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetUserBehaviorDataRsp"
+  /externalcontact/groupchat/statistic:
+    post:
+      tags:
+        - user
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: externalcontact_groupchat_statistic
+      summary: 获取「群聊数据统计」数据 - 按群主聚合的方式
+      description: 获取指定日期的统计数据。注意，企业微信仅存储180天的数据。
+      parameters:
+        - in: query
+          name: access_token
+          required: true
+          type: string
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetGroupchatStatisticReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetGroupchatStatisticRsp"
+  /externalcontact/groupchat/statistic_group_by_day:
+    post:
+      tags:
+        - user
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: externalcontact_groupchat_statistic_group_by_day
+      summary: 获取「群聊数据统计」数据 - 按自然日聚合的方式
+      description: 获取「群聊数据统计」数据 - 按自然日聚合的方式
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetGroupchatStatisticGroupByDayReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetGroupchatStatisticGroupByDayRsp"
+  /media/upload:
+    post:
+      tags:
+        - media
+      consumes:
+        - multipart/form-data
+      produces:
+        - application/json
+      operationId: media_upload
+      summary: 上传临时素材
+      description: 素材上传得到media_id，该media_id仅三天内有效;media_id在同一企业内应用之间可以共享
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: query
+          name: type
+          type: string
+          description: 媒体文件类型，分别有图片（image）、语音（voice）、视频（video），普通文件（file）
+          required: true
+        - in: formData
+          name: filename
+          type: file
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/MediaUploadRsp"
+  /media/uploadimg:
+    post:
+      tags:
+        - media
+      produces:
+        - application/json
+      consumes:
+        - multipart/form-data
+      operationId: media_uploadimg
+      summary: 上传图片
+      description: 上传图片得到图片URL，该URL永久有效;返回的图片URL，仅能用于图文消息正文中的图片展示，或者给客户发送欢迎语等；若用于非企业微信环境下的页面，图片将被屏蔽。每个企业每天最多可上传100张图片
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: formData
+          name: filename
+          type: file
+          required: true
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/MediaUploadImgRsp"
+  /media/get:
+    get:
+      tags:
+        - media
+      consumes:
+        - application/json
+      produces:
+        - application/octet-stream
+      summary: 获取临时素材
+      description: 获取临时素材
+      operationId: media_get
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: query
+          name: media_id
+          type: string
+          required: true
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            type: file
+  /media/get/jssdk:
+    get:
+      tags:
+        - media
+      consumes:
+        - application/json
+      produces:
+        - application/octet-stream
+      operationId: media_get_jssdk
+      summary: 获取高清语音素材
+      description: 可以使用本接口获取从JSSDK的uploadVoice接口上传的临时语音素材，格式为speex，16K采样率。该音频比上文的临时素材获取接口（格式为amr，8K采样率）更加清晰，适合用作语音识别等对音质要求较高的业务。
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: query
+          name: media_id
+          type: string
+          required: true
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            type: file
+  /appchat/create:
+    post:
+      tags:
+        - appchat
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      operationId: appchat_create
+      summary: 创建群聊会话
+      description: 创建群聊会话
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/CreateAppchatReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/CreateAppchatRsp"
+  /appchat/update:
+    post:
+      tags:
+        - appchat
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: appchat_update
+      summary: 修改群聊会话
+      description: 修改群聊会话
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/UpdateAppchatReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/BaseResponse"
+  /appchat/get:
+    get:
+      tags:
+        - appchat
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: appchat_get
+      summary: 获取群聊会话
+      description: 获取群聊会话
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: query
+          name: chatid
+          type: string
+          required: true
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetAppchatReq"
+  /department/create:
+    post:
+      tags:
+        - department
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: department_create
+      summary: 创建部门
+      description: 创建部门
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/CreateDepartmentReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/CreateDepartmentRsp"
+  /department/update:
+    post:
+      tags:
+        - department
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: department_update
+      summary: 更新部门
+      description: 更新部门
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/UpdateDepartmentReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/BaseResponse"
+  /department/delete:
+    get:
+      tags:
+        - department
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: department_delete
+      summary: 删除部门
+      description: 删除部门
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: query
+          name: id
+          type: integer
+          required: true
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/BaseResponse"
+  /department/list:
+    get:
+      tags:
+        - department
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: department_list
+      summary: 获取部门列表
+      description: 获取部门列表
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: query
+          name: id
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetDepartmentListRsp"
+  /linkedcorp/agent/get_perm_list:
+    post:
+      tags:
+        - linkedcorp
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      summary: 获取应用的可见范围
+      description: 本接口只返回互联企业中非本企业内的成员和部门的信息，如果要获取本企业的可见范围，请调用“获取应用”接口
+      operationId: linkedcorp_agent_get_perm_list
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetAgentPermListRsp"
+  /linkedcorp/user/get:
+    post:
+      tags:
+        - linkedcorp
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: linkedcorp_user_get
+      summary: 获取互联企业成员详细信息
+      description: 获取互联企业成员详细信息
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetLinkedcorpUserReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetLinkedcorpUserRsp"
+  /linkedcorp/user/simplelist:
+    post:
+      tags:
+        - linkedcorp
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: linkedcorp_user_simplelist
+      summary: 获取互联企业部门成员
+      description: 获取互联企业部门成员
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetLinkedcorpUserSimplelistReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetLinkedcorpUserSimplelistRsp"
+  /linkedcorp/user/list:
+    post:
+      tags:
+        - linkedcorp
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: linkedcorp_user_list
+      summary: 获取互联企业部门成员详情
+      description: 获取互联企业部门成员详情
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetLinkedcorpUserListReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetLinkedcorpUserListRsp"
+  /linkedcorp/department/list:
+    post:
+      tags:
+        - linkedcorp
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: linkedcorp_department_list
+      summary: 获取互联企业部门列表
+      description: 获取互联企业部门列表
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetLinkedcorpDepartmentListReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetLinkedcorpDepartmentListRsp"
+  /batch/syncuser:
+    post:
+      tags:
+        - batch
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: batch_syncuser
+      summary: 增量更新成员
+      description: 本接口以userid（帐号）为主键，增量更新企业微信通讯录成员。请先下载CSV模板(下载增量更新成员模版)，根据需求填写文件内容。注意事项：1.模板中的部门需填写部门ID，多个部门用分号分隔，部门ID必须为数字，根部门的部门id默认为1;2.文件中存在、通讯录中也存在的成员，更新成员在文件中指定的字段值;3.文件中存在、通讯录中不存在的成员，执行添加操作;4.通讯录中存在、文件中不存在的成员，保持不变;5.成员字段更新规则：可自行添加扩展字段。文件中有指定的字段，以指定的字段值为准；文件中没指定的字段，不更新;
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/BatchSyncuserReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/BatchSyncuserRsp"
+  /batch/replaceuser:
+    post:
+      tags:
+        - batch
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: batch_replaceuser
+      summary: 全量覆盖成员
+      description: 本接口以userid为主键，全量覆盖企业的通讯录成员，任务完成后企业的通讯录成员与提交的文件完全保持一致。请先下载CSV文件(下载全量覆盖成员模版)，根据需求填写文件内容。注意事项：1.模板中的部门需填写部门ID，多个部门用分号分隔，部门ID必须为数字，根部门的部门id默认为1;2.文件中存在、通讯录中也存在的成员，完全以文件为准;3.文件中存在、通讯录中不存在的成员，执行添加操作;4.通讯录中存在、文件中不存在的成员，执行删除操作。出于安全考虑，下面两种情形系统将中止导入并返回相应的错误码。4.1.需要删除的成员多于50人，且多于现有人数的20%以上;4.2.需要删除的成员少于50人，且多于现有人数的80%以上5.成员字段更新规则：可自行添加扩展字段。文件中有指定的字段，以指定的字段值为准；文件中没指定的字段，不更新
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/BatchReplaceuserReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/BatchReplaceuserRsp"
+  /batch/replaceparty:
+    post:
+      tags:
+        - batch
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      operationId: batch_replaceparty
+      summary: 全量覆盖部门
+      description: 本接口以partyid为键，全量覆盖企业的通讯录组织架构，任务完成后企业的通讯录组织架构与提交的文件完全保持一致。请先下载CSV文件(下载全量覆盖部门模版)，根据需求填写文件内容。注意事项：1.文件中存在、通讯录中也存在的部门，执行修改操作;2.文件中存在、通讯录中不存在的部门，执行添加操作;3.文件中不存在、通讯录中存在的部门，当部门下没有任何成员或子部门时，执行删除操作;4.文件中不存在、通讯录中存在的部门，当部门下仍有成员或子部门时，暂时不会删除，当下次导入成员把人从部门移出后自动删除;5.CSV文件中，部门名称、部门ID、父部门ID为必填字段，部门ID必须为数字，根部门的部门id默认为1；排序为可选字段，置空或填0不修改排序, order值大的排序靠前。
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/BatchReplacepartyReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/BatchReplacepartyRsp"
+  /batch/getresult:
+    get:
+      tags:
+        - batch
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: batch_getresult
+      summary: 获取异步任务结果
+      description: 获取异步任务结果
+      parameters:
+        - in: query
+          name: access_token
+          type: string
+          required: true
+        - in: query
+          name: jonid
+          type: string
+          required: true
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/BatchGetresultRsp"
 definitions:
+  BatchGetresultRsp:
+    title: BatchGetresultRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          status:
+            type: integer
+            format: int32
+          type:
+            type: string
+            format: int32
+          total:
+            type: integer
+            format: int32
+          percentage:
+            type: integer
+            format: int32
+          result:
+            type: array
+            items:
+              allOf:
+                - $ref: "#/definitions/BatchGetresultUser"
+                - $ref: "#/definitions/BatchGetresultParty"
+
+  BatchGetresultUser:
+    title: BatchGetresultUser
+    type: object
+    properties:
+      userid:
+        type: string
+      errcode:
+        type: integer
+        format: int32
+      errmsg:
+        type: string
+  BatchGetresultParty:
+    title: BatchGetresultParty
+    type: object
+    properties:
+      action:
+        type: integer
+        format: int32
+      partyid:
+        type: integer
+        format: int32
+      errcode:
+        type: integer
+        format: int32
+      errmsg:
+        type: string
+  BatchReplacepartyRsp:
+    title: BatchReplacepartyRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          jobid:
+            type: string
+  BatchReplacepartyReq:
+    title: BatchReplacepartyReq
+    type: object
+    properties:
+      media_id:
+        type: string
+      to_invite:
+        type: boolean
+      callback:
+        type: object
+        properties:
+          url:
+            type: string
+          token:
+            type: string
+          encodingaeskey:
+            type: string
+  BatchReplaceuserRsp:
+    title: BatchReplaceuserRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          jobid:
+            type: string
+  BatchReplaceuserReq:
+    title: BatchReplaceuserReq
+    type: object
+    properties:
+      media_id:
+        type: string
+      to_invite:
+        type: boolean
+      callback:
+        type: object
+        properties:
+          url:
+            type: string
+          token:
+            type: string
+          encodingaeskey:
+            type: string
+  BatchSyncuserRsp:
+    title: BatchSyncuserRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          jonid:
+            type: string
+  BatchSyncuserReq:
+    title: BatchSyncuserReq
+    type: object
+    properties:
+      media_id:
+        type: string
+      to_invite:
+        type: boolean
+      callback:
+        type: object
+        properties:
+          url:
+            type: string
+          token:
+            type: string
+          encodingaeskey:
+            type: string
+  GetLinkedcorpDepartmentListRsp:
+    title: GetLinkedcorpDepartmentListRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          department_list:
+            type: array
+            items:
+              type: object
+              properties:
+                department_id:
+                  type: integer
+                  format: int32
+                department_name:
+                  type: string
+                parentid:
+                  type: string
+                order:
+                  type: integer
+                  format: int32
+  GetLinkedcorpDepartmentListReq:
+    title: GetLinkedcorpDepartmentListReq
+    type: object
+    properties:
+      department_id:
+        type: string
+        description: 该字段用的是互联应用可见范围接口返回的department_ids参数，用的是 linkedid + ’/‘ + department_id 拼成的字符串
+  GetLinkedcorpUserListRsp:
+    title: GetLinkedcorpUserListRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          userlist:
+            type: array
+            items:
+              type: object
+              properties:
+                userid:
+                  type: string
+                name:
+                  type: string
+                mobile:
+                  type: string
+                telephone:
+                  type: string
+                email:
+                  type: string
+                position:
+                  type: string
+                corpid:
+                  type: string
+                department:
+                  type: array
+                  items:
+                    type: string
+                    description: 成员所属部门id列表，这个字段只会返回传入的department_id所属的互联企业里的部门id
+                extattr:
+                  type: object
+                  properties:
+                    attrs:
+                      type: array
+                      items:
+                        allOf:
+                          - $ref: "#/definitions/LinkedcorpUserInfoAttrText"
+                          - $ref: "#/definitions/LinkedcorpUserInfoAttrWeb"
+
+  GetLinkedcorpUserListReq:
+    title: GetLinkedcorpUserListReq
+    type: object
+    properties:
+      department_id:
+        type: string
+        description: 该字段用的是互联应用可见范围接口返回的department_ids参数，用的是 linkedid + ’/‘ + department_id 拼成的字符串
+      fetch_child:
+        type: boolean
+  GetLinkedcorpUserSimplelistRsp:
+    title: GetLinkedcorpUserSimplelistRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          userlist:
+            type: object
+            properties:
+              userid:
+                type: string
+              name:
+                type: string
+              department:
+                type: array
+                items:
+                  type: string
+              corpid:
+                type: string
+
+  GetLinkedcorpUserSimplelistReq:
+    title: GetLinkedcorpUserSimplelistReq
+    type: object
+    properties:
+      department_id:
+        type: string
+      fetch_child:
+        type: boolean
+  GetLinkedcorpUserRsp:
+    title: GetLinkedcorpUserRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          user_info:
+            type: object
+            properties:
+              userid:
+                type: string
+              name:
+                type: string
+              department:
+                type: array
+                items:
+                  type: string
+              mobile:
+                type: string
+              telephone:
+                type: string
+              email:
+                type: string
+              position:
+                type: string
+              corpid:
+                type: string
+              extattr:
+                type: object
+                properties:
+                  attrs:
+                    type: array
+                    items:
+                      allOf:
+                        - $ref: "#/definitions/LinkedcorpUserInfoAttrText"
+                        - $ref: "#/definitions/LinkedcorpUserInfoAttrWeb"
+
+  LinkedcorpUserInfoAttrText:
+    title: LinkedcorpUserInfoAttrText
+    type: object
+    properties:
+      name:
+        type: string
+      value:
+        type: string
+      type:
+        type: integer
+        format: int32
+      text:
+        type: object
+        properties:
+          value:
+            type: string
+  LinkedcorpUserInfoAttrWeb:
+    title: LinkedcorpUserInfoAttrWeb
+    type: object
+    properties:
+      name:
+        type: string
+      type:
+        type: integer
+        format: int32
+      web:
+        type: object
+        properties:
+          url:
+            type: string
+          title:
+            type: string
+  GetLinkedcorpUserReq:
+    title: GetLinkedcorpUserReq
+    type: object
+    properties:
+      userid:
+        type: string
+        description: 该字段用的是互联应用可见范围接口返回的userids参数，用的是 CorpId + ’/‘ + USERID 拼成的字符串; "CORPID/USERID"
+  GetAgentPermListRsp:
+    title: GetAgentPermListRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          userids:
+            type: array
+            items:
+              type: string
+          department_ids:
+            type: array
+            items:
+              type: string
+  GetDepartmentListRsp:
+    title: GetDepartmentListRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          department:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  format: int32
+                name:
+                  type: string
+                name_en:
+                  type: string
+                parentid:
+                  type: integer
+                  format: int32
+                order:
+                  type: integer
+                  format: int32
+
+  UpdateDepartmentReq:
+    title: UpdateDepartmentReq
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int32
+      name:
+        type: string
+      name_en:
+        type: string
+      parentid:
+        type: integer
+        format: int32
+      order:
+        type: integer
+        format: int32
+  CreateDepartmentRsp:
+    title: CreateDepartmentRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          id:
+            type: integer
+            format: int32
+  CreateDepartmentReq:
+    title: CreateDepartmentReq
+    type: object
+    properties:
+      name:
+        type: string
+        description: 部门名称。同一个层级的部门名称不能重复。长度限制为1~32个字符，字符不能包括\:?”<>｜
+      name_en:
+        type: string
+      parentid:
+        type: integer
+        format: int32
+      order:
+        type: integer
+        format: int32
+      id:
+        type: integer
+        format: int32
+        description: 部门id，32位整型，指定时必须大于1。若不填该参数，将自动生成id
+  GetAppchatReq:
+    title: GetAppchatReq
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          chat_info:
+            type: object
+            properties:
+              chatid:
+                type: string
+              name:
+                type: string
+              owner:
+                type: string
+              userlist:
+                type: array
+                items:
+                  type: string
+  UpdateAppchatReq:
+    title: UpdateAppchatReq
+    type: object
+    properties:
+      chatid:
+        type: string
+      name:
+        type: string
+      owner:
+        type: string
+      add_user_list:
+        type: array
+        items:
+          type: string
+      del_user_list:
+        type: array
+        items:
+          type: string
+  CreateAppchatRsp:
+    title: CreateAppchatRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          chatid:
+            type: string
+  CreateAppchatReq:
+    title: CreateAppchatReq
+    type: object
+    properties:
+      name:
+        type: string
+      owner:
+        type: string
+      chatid:
+        type: string
+      userlist:
+        type: array
+        items:
+          type: string
+  MediaUploadImgRsp:
+    title: MediaUploadImgRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          url:
+            type: string
+  MediaUploadRsp:
+    title: MediaUploadRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          type:
+            type: string
+          media_id:
+            type: string
+          created_at:
+            type: string
+  GetGroupchatStatisticGroupByDayRsp:
+    title: GetGroupchatStatisticGroupByDayRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          items:
+            type: object
+            properties:
+              stat_time:
+                type: integer
+                format: int32
+              data:
+                type: object
+                properties:
+                  new_chat_cnt:
+                    type: integer
+                    format: int32
+                  chat_total:
+                    type: integer
+                    format: int32
+                  chat_has_msg:
+                    type: integer
+                    format: int32
+                  new_member_cnt:
+                    type: integer
+                    format: int32
+                  member_total:
+                    type: integer
+                    format: int32
+                  member_has_msg:
+                    type: integer
+                    format: int32
+                  msg_total:
+                    type: integer
+                    format: int32
+
+  GetGroupchatStatisticGroupByDayReq:
+    title: GetGroupchatStatisticGroupByDayReq
+    type: object
+    properties:
+      day_begin_time:
+        type: integer
+        format: int32
+      day_end_time:
+        type: integer
+        format: int32
+      owner_filter:
+        type: object
+        properties:
+          userid_list:
+            type: array
+            items:
+              type: string
+  GetGroupchatStatisticRsp:
+    title: GetGroupchatStatisticRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          total:
+            type: integer
+            format: int32
+          next_offset:
+            type: integer
+            format: int32
+          items:
+            type: array
+            items:
+              type: object
+              properties:
+                owner:
+                  type: string
+                data:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      new_chat_cnt:
+                        type: integer
+                        format: int32
+                      chat_total:
+                        type: integer
+                        format: int32
+                      chat_has_msg:
+                        type: integer
+                        format: int32
+                      new_member_cnt:
+                        type: integer
+                        format: int32
+                      member_total:
+                        type: integer
+                        format: int32
+                      member_has_msg:
+                        type: integer
+                        format: int32
+                      msg_total:
+                        type: integer
+                        format: int32
+  GetGroupchatStatisticReq:
+    title: GetGroupchatStatisticReq
+    type: object
+    properties:
+      day_begin_time:
+        type: integer
+        format: int32
+      day_end_time:
+        type: integer
+        format: int32
+      owner_filter:
+        type: object
+        properties:
+          userid_list:
+            type: array
+            items:
+              type: string
+      order_by:
+        type: integer
+        format: int32
+      order_asc:
+        type: integer
+        format: int32
+      offset:
+        type: integer
+        format: int32
+      limit:
+        type: integer
+        format: int32
+  GetUserBehaviorDataRsp:
+    title: GetUserBehaviorDataRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          behavior_data:
+            type: array
+            items:
+              type: object
+              properties:
+                stat_time:
+                  type: integer
+                  format: int32
+                chat_cnt:
+                  type: integer
+                  format: int32
+                message_cnt:
+                  type: integer
+                  format: int32
+                reply_percentage:
+                  type: number
+                  format: float
+                avg_reply_time:
+                  type: integer
+                  format: int32
+                negative_feedback_cnt:
+                  type: integer
+                  format: int32
+                new_apply_cnt:
+                  type: integer
+                  format: int32
+                new_contact_cnt:
+                  type: integer
+                  format: int32
+  GetUserBehaviorDataReq:
+    title: GetUserBehaviorDataReq
+    type: object
+    properties:
+      userid:
+        type: array
+        items:
+          type: string
+      partyid:
+        type: array
+        items:
+          type: integer
+          format: int32
+      start_time:
+        type: integer
+        format: int32
+      end_time:
+        type: integer
+        format: int32
+  AddGroupWelcomeTemplateRsp:
+    title: AddGroupWelcomeTemplateRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          template_id:
+            type: string
+
+  AddGroupWelcomeTemplateReq:
+    title: AddGroupWelcomeTemplateReq
+    type: object
+    properties:
+      text:
+        type: object
+        properties:
+          content:
+            type: string
+      image:
+        type: object
+        properties:
+          media_id:
+            type: string
+          pic_url:
+            type: string
+      link:
+        type: object
+        properties:
+          title:
+            type: string
+          picurl:
+            type: string
+          desc:
+            type: string
+          url:
+            type: string
+      miniprogram:
+        type: object
+        properties:
+          title:
+            type: string
+          pic_media_id:
+            type: string
+          appid:
+            type: string
+          page:
+            type: string
+      agentid:
+        type: integer
+        format: int32
+        description: 授权方安装的应用agentid。仅旧的第三方多应用套件需要填此参数
+      notify:
+        type: integer
+        format: int32
+        description: 是否通知成员将这条入群欢迎语应用到客户群中，0-不通知，1-通知， 不填则通知
+
+  SendWelcomeMsgRsp:
+    type: object
+    title: SendWelcomeMsgRsp
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+  SendWelcomeMsgReq:
+    title: SendWelcomeMsgReq
+    type: object
+    properties:
+      welcome_code:
+        type: string
+      text:
+        type: object
+        properties:
+          content:
+            type: string
+      attachments:
+        type: array
+        items:
+          type: object
+          allOf:
+            - $ref: "#/definitions/GroupMsgImage"
+            - $ref: "#/definitions/GroupMsgLink"
+            - $ref: "#/definitions/GroupMsgMiniprogram"
+            - $ref: "#/definitions/GroupMsgVideo"
+
+  GetGroupmsgSendResultRsp:
+    title: GetGroupmsgSendResultRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          next_cursor:
+            type: string
+          send_list:
+            type: array
+            items:
+              type: object
+              properties:
+                external_userid:
+                  type: string
+                chat_id:
+                  type: string
+                userid:
+                  type: string
+                status:
+                  type: integer
+                  format: int32
+                send_time:
+                  type: integer
+                  format: int32
+
+  GetGroupmsgSendResultReq:
+    title: GetGroupmsgSendResultReq
+    type: object
+    properties:
+      msgid:
+        type: string
+      userid:
+        type: string
+      limit:
+        type: integer
+        format: int32
+      cursor:
+        type: string
+  GetGroupmsgTaskRsp:
+    type: object
+    title: GetGroupmsgTaskRsp
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          next_cursor:
+            type: string
+          task_list:
+            type: array
+            items:
+              type: object
+              properties:
+                userid:
+                  type: string
+                status:
+                  type: integer
+                  format: int32
+                send_time:
+                  type: integer
+                  format: int32
+  GetGroupmsgTaskReq:
+    title: GetGroupmsgTaskReq
+    type: object
+    properties:
+      msgid:
+        type: string
+      limit:
+        type: integer
+        format: int32
+      cursor:
+        type: string
+  GetGroupmsgListV2Rsp:
+    title: GetGroupmsgListV2Rsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          next_cursor:
+            type: string
+          attachments:
+            type: array
+            items:
+              type: object
+              allOf:
+                - $ref: "#/definitions/GroupMsgImage"
+                - $ref: "#/definitions/GroupMsgLink"
+                - $ref: "#/definitions/GroupMsgMiniprogram"
+                - $ref: "#/definitions/GroupMsgVideo"
+
+  GetGroupmsgListV2Req:
+    title: GetGroupmsgListV2Req
+    type: object
+    properties:
+      chat_type:
+        type: string
+      start_time:
+        type: integer
+        format: int32
+      end_time:
+        type: integer
+        format: int32
+      creator:
+        type: string
+      filter_type:
+        type: integer
+        format: int32
+        description: 创建人类型。0：企业发表 1：个人发表 2：所有，包括个人创建以及企业创建，默认情况下为所有类型
+      limit:
+        type: integer
+        format: int32
+      cursor:
+        type: string
+
+  AddMsgTemplateRsp:
+    title: AddMsgTemplateRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          msgid:
+            type: string
+          fail_list:
+            type: array
+            items:
+              type: string
+  AddMsgTemplateReq:
+    title: AddMsgTemplateReq
+    type: object
+    properties:
+      chat_type:
+        type: string
+      external_userid:
+        type: array
+        items:
+          type: string
+      sender:
+        type: string
+      text:
+        type: object
+        properties:
+          content:
+            type: string
+      attachments:
+        type: array
+        items:
+          type: object
+          allOf:
+            - $ref: "#/definitions/GroupMsgImage"
+            - $ref: "#/definitions/GroupMsgLink"
+            - $ref: "#/definitions/GroupMsgMiniprogram"
+            - $ref: "#/definitions/GroupMsgVideo"
+
+  GroupMsgImage:
+    type: object
+    properties:
+      msgtype:
+        type: string
+      image:
+        type: object
+        properties:
+          media_id:
+            type: string
+          pic_url:
+            type: string
+  GroupMsgLink:
+    type: object
+    properties:
+      msgtype:
+        type: string
+      link:
+        type: object
+        properties:
+          title:
+            type: string
+          picurl:
+            type: string
+          desc:
+            type: string
+          url:
+            type: string
+  GroupMsgMiniprogram:
+    type: object
+    properties:
+      msgtype:
+        type: string
+      miniprogram:
+        type: object
+        properties:
+          title:
+            type: string
+          pic_media_id:
+            type: string
+          appid:
+            type: string
+          page:
+            type: string
+  GroupMsgVideo:
+    type: object
+    properties:
+      msgtype:
+        type: string
+      video:
+        type: object
+        properties:
+          media_id:
+            type: string
   GetMomentCommentsRsp:
     title: GetMomentCommentsRsp
     type: object
@@ -2539,6 +4254,32 @@ definitions:
           active_cnt:
             type: integer
             format: int32
+  UpdateTaskcardRsp:
+    title: UpdateTaskcardRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          invaliduser:
+            type: array
+            items:
+              type: string
+  UpdateTaskcardReq:
+    title: UpdateTaskcardReq
+    type: object
+    properties:
+      userid:
+        type: array
+        items:
+          type: string
+      agentid:
+        type: integer
+        format: int32
+      task_id:
+        type: string
+      replace_name:
+        type: string
   SendMessageRsp:
     allOf:
       - $ref: "#/definitions/BaseResponse"
