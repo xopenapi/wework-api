@@ -2023,7 +2023,592 @@ paths:
           description: successful operation
           schema:
             $ref: "#/definitions/BatchGetresultRsp"
+  /service/get_provider_token:
+    post:
+      tags:
+        - service
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: service_get_provider_token
+      summary: 获取服务商凭证
+      description: 获取服务商凭证
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetServiceProviderTokenReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetServiceProviderTokenRsp"
+  /service/get_suite_token:
+    post:
+      tags:
+        - service
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: service_get_suite_token
+      summary: 获取第三方应用凭证
+      description: 该API用于获取第三方应用凭证（suite_access_token）。由于第三方服务商可能托管了大量的企业，其安全问题造成的影响会更加严重，故API中除了合法来源IP校验之外，还额外增加了suite_ticket作为安全凭证。获取suite_access_token时，需要suite_ticket参数。suite_ticket由企业微信后台定时推送给“指令回调URL”，每十分钟更新一次，见推送suite_ticket。suite_ticket实际有效期为30分钟，可以容错连续两次获取suite_ticket失败的情况，但是请永远使用最新接收到的suite_ticket。通过本接口获取的suite_access_token有效期为2小时，开发者需要进行缓存，不可频繁获取。
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetServiceSuiteTokenReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetServiceSuiteTokenRsp"
+  /service/get_pre_auth_code:
+    get:
+      tags:
+        - service
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      operationId: service_get_pre_auth_code
+      summary: 获取预授权码
+      description: 该API用于获取预授权码。预授权码用于企业授权时的第三方服务商安全验证。
+      parameters:
+        - in: query
+          name: suite_access_token
+          type: string
+          required: true
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetServicePreAuthCodeRsp"
+  /service/set_session_info:
+    post:
+      tags:
+        - service
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      operationId: service_set_session_info
+      summary: 设置授权配置
+      description: 该接口可对某次授权进行配置。可支持测试模式（应用未发布时）。
+      parameters:
+        - in: query
+          name: suite_access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/SetServiceSessionInfoReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/BaseResponse"
+  /service/get_permanent_code:
+    post:
+      tags:
+        - service
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      operationId: service_get_permanent_code
+      summary: 获取企业永久授权码
+      description: 该API用于使用临时授权码换取授权方的永久授权码，并换取授权信息、企业access_token，临时授权码一次有效。建议第三方以userid为主键，来建立自己的管理员账号。
+      parameters:
+        - in: query
+          name: suite_access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetServicePermanentCodeReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetServicePermanentCodeRsp"
+  /service/get_auth_info:
+    post:
+      tags:
+        - service
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      operationId: service_get_auth_info
+      summary: 获取企业授权信息
+      description: 该API用于通过永久授权码换取企业微信的授权信息。 永久code的获取，是通过临时授权码使用get_permanent_code 接口获取到的permanent_code。
+      parameters:
+        - in: query
+          name: suite_access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetServiceAuthInfoReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetServiceAuthInfoRsp"
+  /service/get_corp_token:
+    post:
+      tags:
+        - service
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      operationId: service_get_corp_token
+      summary: 获取企业凭证
+      description: 第三方服务商在取得企业的永久授权码后，通过此接口可以获取到企业的access_token。获取后可通过通讯录、应用、消息等企业接口来运营这些应用。此处获得的企业access_token与企业获取access_token拿到的token，本质上是一样的，只不过获取方式不同。获取之后，就跟普通企业一样使用token调用API接口
+      parameters:
+        - in: query
+          name: suite_access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetServiceCorpTokenReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetServiceCorpTokenRsp"
+  /service/get_admin_list:
+    post:
+      tags:
+        - service
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      operationId: service_get_admin_list
+      summary: 获取应用的管理员列表
+      description: 第三方服务商可以用此接口获取授权企业中某个第三方应用的管理员列表(不包括外部管理员)，以便服务商在用户进入应用主页之后根据是否管理员身份做权限的区分。该应用必须与SUITE_ACCESS_TOKEN对应的suiteid对应，否则没权限查看
+      parameters:
+        - in: query
+          name: suite_access_token
+          type: string
+          required: true
+        - in: body
+          name: body
+          schema:
+            $ref: "#/definitions/GetServiceAdminListReq"
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetServiceAdminListRsp"
+
 definitions:
+  GetServiceAdminListRsp:
+    title: GetServiceAdminListRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          admin:
+            type: array
+            items:
+              type: object
+              properties:
+                userid:
+                  type: string
+                open_userid:
+                  type: string
+                auth_type:
+                  type: integer
+                  format: int32
+  GetServiceAdminListReq:
+    title: GetServiceAdminListReq
+    type: object
+    properties:
+      auth_corpid:
+        type: string
+      agentid:
+        type: integer
+        format: int32
+  GetServiceCorpTokenRsp:
+    title: GetServiceCorpTokenRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          access_token:
+            type: string
+          expires_in:
+            type: integer
+            format: int32
+  GetServiceCorpTokenReq:
+    title: GetServiceCorpTokenReq
+    type: object
+    properties:
+      auth_corpid:
+        type: string
+        description: 授权方corpid
+      permanent_code:
+        type: string
+        description: 永久授权码，通过get_permanent_code获取
+  GetServiceAuthInfoRsp:
+    title: GetServiceAuthInfoRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          expires_in:
+            type: integer
+            format: int32
+          permanent_code:
+            type: string
+          dealer_corp_info:
+            type: object
+            properties:
+              corpid:
+                type: string
+              corp_name:
+                type: string
+              auth_corp_info:
+                type: object
+                properties:
+                  corpid:
+                    type: string
+                  corp_name:
+                    type: string
+                  corp_type:
+                    type: string
+                  corp_square_logo_url:
+                    type: string
+                  corp_user_max:
+                    type: integer
+                    format: int32
+                  corp_agent_max:
+                    type: integer
+                    format: int32
+                  corp_full_name:
+                    type: string
+                  verified_end_time:
+                    type: integer
+                    format: int32
+                  subject_type:
+                    type: integer
+                    format: int32
+                  corp_wxqrcode:
+                    type: string
+                  corp_scale:
+                    type: string
+                  corp_industry:
+                    type: string
+                  corp_sub_industry:
+                    type: string
+                  location:
+                    type: string
+          auth_info:
+            type: array
+            items:
+              type: object
+              properties:
+                agentid:
+                  type: integer
+                  format: int32
+                name:
+                  type: string
+                round_logo_url:
+                  type: string
+                square_logo_url:
+                  type: string
+                appid:
+                  type: integer
+                  format: int32
+                auth_mode:
+                  type: integer
+                  format: int32
+                privilege:
+                  type: object
+                  properties:
+                    level:
+                      type: integer
+                      format: int32
+                      description: 权限等级。1:通讯录基本信息只读2:通讯录全部信息只读3:通讯录全部信息读写4:单个基本信息只读5:通讯录全部信息只写
+                    allow_party:
+                      type: array
+                      items:
+                        type: integer
+                        format: int32
+                    allow_user:
+                      type: array
+                      items:
+                        type: string
+                    allow_tag:
+                      type: array
+                      items:
+                        type: integer
+                        format: int32
+                    extra_party:
+                      type: array
+                      items:
+                        type: integer
+                        format: int32
+                    extra_user:
+                      type: array
+                      items:
+                        type: string
+                    extra_tag:
+                      type: array
+                      items:
+                        type: integer
+                        format: int32
+                shared_from:
+                  type: object
+                  properties:
+                    corpid:
+                      type: string
+
+  GetServiceAuthInfoReq:
+    title: GetServiceAuthInfoReq
+    type: object
+    properties:
+      auth_corpid:
+        type: string
+      permanent_code:
+        type: string
+  GetServicePermanentCodeRsp:
+    title: GetServicePermanentCodeRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          access_token:
+            type: string
+          expires_in:
+            type: integer
+            format: int32
+          permanent_code:
+            type: string
+          dealer_corp_info:
+            type: object
+            properties:
+              corpid:
+                type: string
+              corp_name:
+                type: string
+          auth_corp_info:
+            type: object
+            properties:
+              corpid:
+                type: string
+              corp_name:
+                type: string
+              corp_type:
+                type: string
+              corp_square_logo_url:
+                type: string
+              corp_user_max:
+                type: integer
+                format: int32
+              corp_agent_max:
+                type: integer
+                format: int32
+              corp_full_name:
+                type: string
+              verified_end_time:
+                type: integer
+                format: int32
+              subject_type:
+                type: integer
+                format: int32
+              corp_wxqrcode:
+                type: string
+              corp_scale:
+                type: string
+              corp_industry:
+                type: string
+              corp_sub_industry:
+                type: string
+              location:
+                type: string
+          auth_info:
+            type: array
+            items:
+              type: object
+              properties:
+                agentid:
+                  type: integer
+                  format: int32
+                name:
+                  type: string
+                round_logo_url:
+                  type: string
+                square_logo_url:
+                  type: string
+                appid:
+                  type: integer
+                  format: int32
+                auth_mode:
+                  type: integer
+                  format: int32
+                privilege:
+                  type: object
+                  properties:
+                    level:
+                      type: integer
+                      format: int32
+                      description: 权限等级。1:通讯录基本信息只读2:通讯录全部信息只读3:通讯录全部信息读写4:单个基本信息只读5:通讯录全部信息只写
+                    allow_party:
+                      type: array
+                      items:
+                        type: integer
+                        format: int32
+                    allow_user:
+                      type: array
+                      items:
+                        type: string
+                    allow_tag:
+                      type: array
+                      items:
+                        type: integer
+                        format: int32
+                    extra_party:
+                      type: array
+                      items:
+                        type: integer
+                        format: int32
+                    extra_user:
+                      type: array
+                      items:
+                        type: string
+                    extra_tag:
+                      type: array
+                      items:
+                        type: integer
+                        format: int32
+                shared_from:
+                  type: object
+                  properties:
+                    corpid:
+                      type: string
+          auth_user_info:
+            type: object
+            properties:
+              userid:
+                type: string
+              open_userid:
+                type: string
+              name:
+                type: string
+                description: 授权管理员的name，可能为空（企业互联由上级企业共享第三方应用给下级时，不返回授权的管理员信息）
+              avatar:
+                type: string
+          register_code_info:
+            type: object
+            properties:
+              register_code:
+                type: string
+              template_id:
+                type: string
+              state:
+                type: string
+  GetServicePermanentCodeReq:
+    title: GetServicePermanentCodeReq
+    type: object
+    properties:
+      auth_code:
+        type: string
+  SetServiceSessionInfoReq:
+    title: SetServiceSessionInfoReq
+    type: object
+    properties:
+      pre_auth_code:
+        type: string
+      session_info:
+        type: object
+        properties:
+          appid:
+            type: array
+            description: 允许进行授权的应用id，如1、2、3， 不填或者填空数组都表示允许授权套件内所有应用（仅旧的多应用套件可传此参数，新开发者可忽略）
+            items:
+              type: integer
+              format: int32
+          auth_type:
+            type: integer
+            format: int32
+            description: 授权类型：0 正式授权， 1 测试授权。 默认值为0。注意，请确保应用在正式发布后的授权类型为“正式授权”
+
+  GetServicePreAuthCodeReq:
+    title: GetServicePreAuthCodeReq
+    type: object
+    properties:
+      corpid:
+        type: string
+      provider_secret:
+        type: string
+  GetServicePreAuthCodeRsp:
+    title: GetServicePreAuthCodeRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          pre_auth_code:
+            type: string
+          expires_in:
+            type: integer
+            format: int32
+  GetServiceSuiteTokenReq:
+    title: GetServiceSuiteTokenReq
+    type: object
+    properties:
+      suite_id:
+        type: string
+      suite_secret:
+        type: string
+      suite_ticket:
+        type: string
+  GetServiceSuiteTokenRsp:
+    title: GetServiceSuiteTokenRsp
+    type: object
+    allOf:
+      - $ref: "#/definitions/BaseResponse"
+      - type: object
+        properties:
+          suite_access_token:
+            type: string
+          expires_in:
+            type: integer
+            format: int32
+
+  GetServiceProviderTokenRsp:
+    title: GetServiceProviderTokenRsp
+    type: object
+    properties:
+      provider_access_token:
+        type: string
+      expires_in:
+        type: integer
+        format: int32
+  GetServiceProviderTokenReq:
+    title: GetServiceProviderTokenReq
+    type: object
+    properties:
+      corpid:
+        type: string
+      provider_secret:
+        type: string
   BatchGetresultRsp:
     title: BatchGetresultRsp
     type: object
