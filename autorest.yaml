@@ -6,4 +6,6 @@ clear-output-folder: true
 title: wework-api
 
 typescript:
+  package-name: "@xopenapi/wework"
+  package-version: "0.0.2"
   output-folder: ./out/typescript
