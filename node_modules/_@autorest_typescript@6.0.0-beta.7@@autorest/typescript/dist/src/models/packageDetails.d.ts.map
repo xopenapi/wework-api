@@ -1,0 +1,1 @@
+{"version":3,"file":"packageDetails.d.ts","sourceRoot":"","sources":["../../../src/models/packageDetails.ts"],"names":[],"mappings":"AAGA,MAAM,WAAW,cAAc;IAC7B,IAAI,EAAE,MAAM,CAAC;IACb,SAAS,CAAC,EAAE,MAAM,CAAC;IACnB,gBAAgB,EAAE,MAAM,CAAC;IACzB,WAAW,CAAC,EAAE,MAAM,CAAC;IACrB,OAAO,EAAE,MAAM,CAAC;CACjB"}
