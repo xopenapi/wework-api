@@ -8,19 +8,16 @@ info:
     url: "https://www.apache.org/licenses/LICENSE-2.0.html"
 host: qyapi.weixin.qq.com
 basePath: /cgi-bin
-tags:
-  - name: token
-    description: ""
 schemes:
   - https
 paths:
   /gettoken:
     get:
       tags:
-        - token
+        - auth
       summary: 每个应用有独立的secret，获取到的access_token只能本应用使用，所以每个应用的access_token应该分开来获取
       description: ""
-      operationId: get_token
+      operationId: auth_getToken
       produces:
         - application/json
       parameters:
@@ -42,10 +39,10 @@ paths:
   /get_api_domain_ip:
     get:
       tags:
-        - token
+        - auth
       summary: 获取企业微信API域名IP段
       description: ""
-      operationId: get_api_domain_ip
+      operationId: auth_getApiDomainIp
       produces:
         - application/json
       parameters:
@@ -61,10 +58,10 @@ paths:
   /user/create:
     post:
       tags:
-        - user
+        - users
       summary: 创建成员
       description: 创建成员
-      operationId: create_user
+      operationId: users_create
       consumes:
         - application/json
       produces:
@@ -313,7 +310,7 @@ paths:
       tags:
         - corp
       summary: 获取加入企业二维码
-      operationId: get_join_qrcode
+      operationId: corp_getJoinQrcode
       produces:
         - application/json
       parameters:
