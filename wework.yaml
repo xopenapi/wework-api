@@ -5995,6 +5995,14 @@ definitions:
       extattr:
         description: 自定义字段
         $ref: "#/definitions/ExtAttrs"
+      enable:
+        type: integer
+        format: int32
+      hide_mobile:
+        type: integer
+        format: int32
+      english_name:
+        type: string
   ExternalProfile:
     title: ExternalProfile
     description: ExternalProfile
