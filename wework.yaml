@@ -4331,6 +4331,10 @@ definitions:
                       type: string
                 unionid:
                   type: string
+                name: 
+                  type: string
+                group_nickname:
+                  type: string
           admin_list:
             type: array
             items:
