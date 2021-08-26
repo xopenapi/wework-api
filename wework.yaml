@@ -4345,6 +4345,9 @@ definitions:
     properties:
       chat_id:
         type: string
+      need_name:
+        type: integer
+        format: int32
   ConvertOpengidToChatidRsp:
     title: ConvertOpengidToChatidRsp
     type: object
