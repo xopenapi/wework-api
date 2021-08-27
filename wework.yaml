@@ -2224,6 +2224,28 @@ paths:
           description: successful operation
           schema:
             $ref: "#/definitions/GetAgentRsp"
+  /agent/list:
+    post:
+      tags: 
+        - agents
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      summary: 获取access_token对应的应用列表
+      description: 获取access_token对应的应用列表
+      operationId: agents_list
+      parameters:
+        - in: query
+          name: access_token
+          required: true
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/GetAgentListRsp"
+            
 
   /agent/set:
     post:
@@ -2404,8 +2426,28 @@ definitions:
                     type: string
                   appid: 
                     type: string
-                  
-
+  GetAgentListRsp:
+    title: GetAgentListRsp
+    type: object
+    properties:
+      errcode:
+        type: integer
+        format: int32
+      errmsg:
+        type: string
+      agentlist:
+        type: array
+        items:
+          type: object
+          properties:
+            name:
+              type: string
+            agentid:
+              type: integer
+              format: int32
+            square_logo_url:
+              type: string
+              
   SetAgentRsp:
     title: SetAgentRsp
     type: object

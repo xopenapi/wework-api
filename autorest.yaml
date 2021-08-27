@@ -7,5 +7,4 @@ title: wework-api
 
 typescript:
   package-name: "@xopenapi/wework"
-  package-version: "0.0.9"
-  output-folder: ./out/typescript
+  package-version: "0.0.10"
