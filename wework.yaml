@@ -4850,6 +4850,8 @@ definitions:
     title: GetExternalContactBatchUserRsp
     type: object
     properties:
+      next_cursor:
+        type: string
       errcode:
         type: integer
         format: int32
@@ -4860,32 +4862,38 @@ definitions:
         items:
           type: object
           properties:
-            remark:
-              type: string
-            description:
-              type: string
-            createtime:
-              type: integer
-              format: int32
-            tag_id:
-              type: array
-              items:
-                type: string
-            remark_corp_name:
-              type: string
-            remark_mobiles:
-              type: array
-              items:
-                type: string
-            oper_userid:
-              type: string
-            add_way:
-              type: integer
-              format: int32
+            follow_info:
+              type: object
+              properties:
+                userid:
+                  type: string
+                remark:
+                  type: string
+                description:
+                  type: string
+                createtime:
+                  type: integer
+                  format: int32
+                tag_id: 
+                  type: array
+                  items:
+                    type: string
+                remark_corp_name:
+                  type: string
+                remark_mobiles:
+                  type: array
+                  items:
+                    type: string
+                oper_userid:
+                  type: string
+                add_way:
+                  type: string
+                state:
+                  type: string
             external_contact:
               type: object
               properties:
-                external_userid:
+                external_userid: 
                   type: string
                 name:
                   type: string
@@ -5033,63 +5041,60 @@ definitions:
       external_contact:
         type: object
         properties:
-          external_contact:
+          external_userid:
+            type: string
+          name:
+            type: string
+          position:
+            type: string
+          avatar:
+            type: string
+          corp_name:
+            type: string
+          corp_full_name:
+            type: string
+          type:
+            type: integer
+            format: int32
+          gender:
+            type: integer
+            format: int32
+          unionid:
+            type: string
+          external_profile:
             type: object
             properties:
-              external_userid:
-                type: string
-              name:
-                type: string
-              position:
-                type: string
-              avatar:
-                type: string
-              corp_name:
-                type: string
-              corp_full_name:
-                type: string
-              type:
-                type: integer
-                format: int32
-              gender:
-                type: integer
-                format: int32
-              unionid:
-                type: string
-              external_profile:
-                type: object
-                properties:
-                  external_attr:
-                    type: array
-                    items:
+              external_attr:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type:
+                      type: integer
+                      format: int32
+                    name:
+                      type: string
+                    web:
                       type: object
                       properties:
-                        type:
-                          type: integer
-                          format: int32
-                        name:
+                        url:
                           type: string
-                        web:
-                          type: object
-                          properties:
-                            url:
-                              type: string
-                            title:
-                              type: string
-                        text:
-                          type: object
-                          properties:
-                            value:
-                              type: string
-                        miniprogram:
-                          type: object
-                          properties:
-                            appid:
-                              type: string
-                            pagepath:
-                              type: string
-                            title:
-                              type: string
+                        title:
+                          type: string
+                    text:
+                      type: object
+                      properties:
+                        value:
+                          type: string
+                    miniprogram:
+                      type: object
+                      properties:
+                        appid:
+                          type: string
+                        pagepath:
+                          type: string
+                        title:
+                          type: string
 
   ProfileMiniprogram:
     type: object
