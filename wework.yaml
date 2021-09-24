@@ -4981,8 +4981,10 @@ definitions:
     title: GetExternalContactBatchUserReq
     type: object
     properties:
-      userid:
-        type: string
+      userid_list:
+        type: array
+        items:
+          type: string
       cursor:
         type: string
       limit:
